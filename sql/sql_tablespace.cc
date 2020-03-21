@@ -175,12 +175,12 @@ bool complete_stmt(THD *thd, handlerton *hton, DISABLE_ROLLBACK &&dr,
       return true;
     }
 
-  dr();
-
   /* Commit the statement and call storage engine's post-DDL hook. */
   if (trans_commit_stmt(thd) || trans_commit(thd)) {
     return true;
   }
+
+  dr();
 
   if (hton && ddl_is_atomic(hton) && hton->post_ddl) {
     hton->post_ddl(thd);
@@ -210,7 +210,16 @@ bool lock_rec(THD *thd, MDL_request_list *rlst, const LEX_STRING &tsp) {
                    MDL_INTENTION_EXCLUSIVE, MDL_TRANSACTION);
   rlst->push_front(&backup_lock_request);
 
-  return thd->mdl_context.acquire_locks(rlst, thd->variables.lock_wait_timeout);
+  if (thd->mdl_context.acquire_locks(rlst, thd->variables.lock_wait_timeout))
+    return true;
+
+  /*
+    Now when we have protection against concurrent change of read_only
+    option we can safely re-check its value.
+  */
+  if (check_readonly(thd, true)) return true;
+
+  return false;
 }
 
 template <typename... Names>
@@ -365,7 +374,7 @@ bool intermediate_commit_unless_atomic_ddl(THD *thd, handlerton *hton) {
     return false;
   }
   /* purecov: begin inspected */
-  Disable_gtid_state_update_guard disabler{thd};
+  Implicit_substatement_state_guard substatement_guard{thd};
   return (trans_commit_stmt(thd) || trans_commit(thd));
   /* purecov: end */
 }
@@ -470,7 +479,10 @@ bool Sql_cmd_create_tablespace::execute(THD *thd) {
     encrypt_tablespace = dd::is_encrypted(m_options->encryption);
     encrypt_type = dd::make_string_type(m_options->encryption);
   } else {
-    encrypt_tablespace = thd->variables.default_table_encryption;
+    encrypt_tablespace =
+        thd->variables.default_table_encryption == DEFAULT_TABLE_ENC_ON ||
+        global_system_variables.default_table_encryption ==
+            DEFAULT_TABLE_ENC_ONLINE_TO_KEYRING;
     encrypt_type = encrypt_tablespace ? "Y" : "N";
   }
 
@@ -510,6 +522,8 @@ bool Sql_cmd_create_tablespace::execute(THD *thd) {
   // - Disallow encryption='y', if SE does not support it.
   if (hton->flags & HTON_SUPPORTS_TABLE_ENCRYPTION) {
     tablespace->options().set("encryption", encrypt_type);
+    tablespace->options().set("explicit_encryption",
+                              m_options->encryption.str ? true : false);
   } else if (encrypt_tablespace) {
     my_error(ER_CHECK_NOT_IMPLEMENTED, MYF(0), "ENCRYPTION");
     return true;
@@ -591,7 +605,7 @@ bool Sql_cmd_create_tablespace::execute(THD *thd) {
         return true;
       }
 
-      Disable_gtid_state_update_guard disabler{thd};
+      Implicit_substatement_state_guard substatement_guard{thd};
       (void)trans_commit_stmt(thd);
       (void)trans_commit(thd);
       /* purecov: end */
@@ -690,7 +704,7 @@ bool Sql_cmd_drop_tablespace::execute(THD *thd) {
         return true;
       }
 
-      Disable_gtid_state_update_guard disabler{thd};
+      Implicit_substatement_state_guard substatement_guard{thd};
       (void)trans_commit_stmt(thd);
       (void)trans_commit(thd);
       /* purecov: end */
@@ -939,6 +953,11 @@ bool Sql_cmd_alter_tablespace::execute(THD *thd) {
                                     &table_mdl_reqs))
         return true;
     }
+  }
+
+  if (hton->flags & HTON_SUPPORTS_TABLE_ENCRYPTION) {
+    tsmp.second->options().set("explicit_encryption",
+                               m_options->encryption.str ? true : false);
   }
 
   /*
@@ -1282,9 +1301,9 @@ bool Sql_cmd_alter_tablespace_rename::execute(THD *thd) {
 
   // TODO WL#9536: Until crash-safe ddl is implemented we need to do
   // manual compensation in case of rollback
-  auto compensate_grd = dd::sdi_utils::make_guard(hton, [&](handlerton *hton) {
+  auto compensate_grd = dd::sdi_utils::make_guard(hton, [&](handlerton *ht) {
     std::unique_ptr<dd::Tablespace> comp{tsmp.first->clone()};
-    (void)hton->alter_tablespace(hton, thd, &ts_info, tsmp.second, comp.get());
+    (void)ht->alter_tablespace(ht, thd, &ts_info, tsmp.second, comp.get());
   });
 
   DBUG_EXECUTE_IF("tspr_post_se", {
@@ -1440,7 +1459,7 @@ bool Sql_cmd_create_undo_tablespace::execute(THD *thd) {
         return true;
       }
 
-      Disable_gtid_state_update_guard disabler{thd};
+      Implicit_substatement_state_guard substatement_guard{thd};
       (void)trans_commit_stmt(thd);
       (void)trans_commit(thd);
     }
@@ -1538,7 +1557,7 @@ bool Sql_cmd_alter_undo_tablespace::execute(THD *thd) {
       hton->alter_tablespace(hton, thd, &ts_info, tsmp.first, tsmp.second);
   if (map_errors(ha_error, "ALTER UNDO TABLEPSPACE", &ts_info)) {
     if (!ddl_is_atomic(hton)) {
-      Disable_gtid_state_update_guard disabler{thd};
+      Implicit_substatement_state_guard substatement_guard{thd};
       (void)trans_commit_stmt(thd);
       (void)trans_commit(thd);
     }
@@ -1638,7 +1657,7 @@ bool Sql_cmd_drop_undo_tablespace::execute(THD *thd) {
         return true;
       }
 
-      Disable_gtid_state_update_guard disabler{thd};
+      Implicit_substatement_state_guard substatement_guard{thd};
       (void)trans_commit_stmt(thd);
       (void)trans_commit(thd);
     }
