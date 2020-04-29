@@ -473,6 +473,7 @@ void ssl_start() {
   }
 }
 
+#ifndef LIBRESSL_VERSION_NUMBER
 /**
   Set fips mode in openssl library,
   When we set fips mode ON/STRICT, it will perform following operations:
@@ -526,6 +527,7 @@ EXIT:
   @returns openssl current fips mode
 */
 uint get_fips_mode() { return FIPS_mode(); }
+#endif
 
 long process_tls_version(const char *tls_version) {
   const char *separator = ",";

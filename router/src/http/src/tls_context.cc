@@ -91,7 +91,7 @@ static int o11x_version(TlsVersion version) {
       return TLS1_1_VERSION;
     case TlsVersion::TLS_1_2:
       return TLS1_2_VERSION;
-#if OPENSSL_VERSION_NUMBER >= ROUTER_OPENSSL_VERSION(1, 1, 1)
+#ifdef TLS1_3_VERSION
     case TlsVersion::TLS_1_3:
       return TLS1_3_VERSION;
 #endif
@@ -120,9 +120,11 @@ void TlsContext::version_range(TlsVersion min_version, TlsVersion max_version) {
   switch (min_version) {
     default:
       // unknown, leave all disabled
+#ifdef TLS1_3_VERSION
       // fallthrough
     case TlsVersion::TLS_1_3:
       opts |= SSL_OP_NO_TLSv1_2;
+#endif
       // fallthrough
     case TlsVersion::TLS_1_2:
       opts |= SSL_OP_NO_TLSv1_1;
@@ -170,8 +172,10 @@ TlsVersion TlsContext::min_version() const {
       return TlsVersion::TLS_1_1;
     case TLS1_2_VERSION:
       return TlsVersion::TLS_1_2;
+#ifdef TLS1_3_VERSION
     case TLS1_3_VERSION:
       return TlsVersion::TLS_1_3;
+#endif
     case 0:
       return TlsVersion::AUTO;
     default:
@@ -230,7 +234,8 @@ TlsContext::InfoCallback TlsContext::info_callback() const {
 }
 
 int TlsContext::security_level() const {
-#if OPENSSL_VERSION_NUMBER >= ROUTER_OPENSSL_VERSION(1, 1, 0)
+#if OPENSSL_VERSION_NUMBER >= ROUTER_OPENSSL_VERSION(1, 1, 0) && \
+    !defined(LIBRESSL_VERSION_NUMBER)
   return SSL_CTX_get_security_level(ssl_ctx_.get());
 #else
   return 0;
