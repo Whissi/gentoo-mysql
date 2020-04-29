@@ -56,7 +56,9 @@ static void my_md5_hash(unsigned char *digest, unsigned const char *buf,
 int compute_md5_hash(char *digest, const char *buf, int len) {
   int retval = 0;
   int fips_mode = 0;
+#ifndef LIBRESSL_VERSION_NUMBER
   fips_mode = FIPS_mode();
+#endif
   /* If fips mode is ON/STRICT restricted method calls will result into abort,
    * skipping call. */
   if (fips_mode == 0) {
