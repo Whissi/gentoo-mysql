@@ -167,12 +167,6 @@ IF(MY_COMPILER_IS_CLANG)
   # -Wzero-as-null-pointer-constant
 ENDIF()
 
-# Turn on Werror (warning => error) when using maintainer mode.
-IF(MYSQL_MAINTAINER_MODE)
-  STRING_APPEND(MY_C_WARNING_FLAGS   " -Werror")
-  STRING_APPEND(MY_CXX_WARNING_FLAGS " -Werror")
-ENDIF()
-
 # Set warning flags for gcc/g++/clang/clang++
 IF(MY_COMPILER_IS_GNU_OR_CLANG)
   STRING_APPEND(CMAKE_C_FLAGS   " ${MY_C_WARNING_FLAGS}")
