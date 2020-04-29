@@ -112,6 +112,26 @@ MYSQL_ADD_EXECUTABLE(static_thread_local_test
   EXCLUDE_FROM_ALL
   )
 
+IF(WITHOUT_CLIENTLIBS)
+MYSQL_ADD_EXECUTABLE(my_print_defaults
+  my_print_defaults.cc
+  COMPONENT Server
+  LINK_LIBRARIES mysys
+  SKIP_INSTALL )
+MYSQL_ADD_EXECUTABLE(perror
+  perror.cc
+  COMPONENT Server
+  DEPENDENCIES GenError
+  LINK_LIBRARIES mysys
+  SKIP_INSTALL )
+IF(BUILD_BUNDLED_LZ4)
+  MYSQL_ADD_EXECUTABLE(lz4_decompress
+    lz4_decompress.cc
+    COMPONENT Server
+    LINK_LIBRARIES ${LZ4_LIBRARY} mysys
+    SKIP_INSTALL )
+ENDIF()
+ELSE(WITHOUT_CLIENTLIBS)
 MYSQL_ADD_EXECUTABLE(my_print_defaults
   my_print_defaults.cc
   COMPONENT Server
@@ -129,13 +149,13 @@ IF(BUILD_BUNDLED_LZ4)
     COMPONENT Server
     LINK_LIBRARIES ${LZ4_LIBRARY} mysys
     )
-ENDIF()
-
+ENDIF(BUILD_BUNDLED_LZ4)
 MYSQL_ADD_EXECUTABLE(zlib_decompress
   zlib_decompress.cc
   COMPONENT Server
   LINK_LIBRARIES ${ZLIB_LIBRARY} mysys
   )
+ENDIF(WITHOUT_CLIENTLIBS)
 
 # All targets below belong to COMPONENT Server and depend on InnoDB.
 IF(WITHOUT_SERVER)

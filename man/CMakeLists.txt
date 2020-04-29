@@ -26,7 +26,6 @@ SET(MAN1
   ibd2sdi.1
   innochecksum.1
   lz4_decompress.1
-  my_print_defaults.1
   myisam_ftdump.1
   myisamchk.1
   myisamlog.1
@@ -48,8 +47,6 @@ SET(MAN1
   mysqlpump.1
   mysqlshow.1
   mysqlslap.1
-  perror.1
-  zlib_decompress.1
   )
 
 IF(NOT WITH_SYSTEMD)
