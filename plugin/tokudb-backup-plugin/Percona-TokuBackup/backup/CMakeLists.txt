@@ -20,7 +20,7 @@ set_property(DIRECTORY APPEND PROPERTY COMPILE_DEFINITIONS
   _FILE_OFFSET_BITS=64 
   _LARGEFILE64_SOURCE)
 
-set(CMAKE_CXX_FLAGS "-Werror -W -Wall -Wshadow ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "-W -Wall -Wshadow ${CMAKE_CXX_FLAGS}")
 
 set(USE_VALGRIND OFF CACHE BOOL "whether to use valgrind headers")
 if (USE_VALGRIND)
