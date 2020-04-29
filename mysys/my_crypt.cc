@@ -27,7 +27,7 @@
 
 #include "my_dbug.h"
 
-#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L && !defined(LIBRESSL_VERSION_NUMBER)
 #define ERR_remove_state(X) ERR_clear_error()
 #else
 #define EVP_CIPHER_CTX_buf_noconst(ctx) ((ctx)->buf)
@@ -86,7 +86,7 @@ class MyEncryptionCTX : private boost::noncopyable {
 };
 
 MyEncryptionCTX::MyEncryptionCTX() {
-#if OPENSSL_VERSION_NUMBER < 0x10100000L
+#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
   ctx = new EVP_CIPHER_CTX();
   EVP_CIPHER_CTX_init(ctx);
 #else
@@ -95,7 +95,8 @@ MyEncryptionCTX::MyEncryptionCTX() {
 }
 
 MyEncryptionCTX::~MyEncryptionCTX() {
-#if OPENSSL_VERSION_NUMBER < 0x10100000L
+#if OPENSSL_VERSION_NUMBER < 0x10100000L || \
+    (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x02090000fL)
   EVP_CIPHER_CTX_cleanup(ctx);
   delete ctx;
 #else
