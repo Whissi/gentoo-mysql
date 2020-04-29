@@ -104,11 +104,5 @@ add_subdirectory(src)
 add_subdirectory(ftcxx)
 add_subdirectory(tools)
 
-install(
-  FILES README.md COPYING.AGPLv3 COPYING.GPLv2 PATENTS
-  DESTINATION .
-  COMPONENT tokukv_misc
-  )
-
 ## build tags
 include(TokuBuildTagDatabases)
