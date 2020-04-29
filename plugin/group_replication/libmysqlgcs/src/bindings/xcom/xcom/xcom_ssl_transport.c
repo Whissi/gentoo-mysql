@@ -329,6 +329,7 @@ error:
   return 1;
 }
 
+#ifndef LIBRESSL_VERSION_NUMBER
 #define OPENSSL_ERROR_LENGTH 512
 static int configure_ssl_fips_mode(const uint fips_mode) {
   int rc = -1;
@@ -352,6 +353,7 @@ static int configure_ssl_fips_mode(const uint fips_mode) {
 EXIT:
   return rc;
 }
+#endif
 
 static int configure_ssl_ca(SSL_CTX *ssl_ctx, const char *ca_file,
                             const char *ca_path) {
@@ -555,10 +557,12 @@ int xcom_init_ssl(const char *server_key_file, const char *server_cert_file,
   int verify_server = SSL_VERIFY_NONE;
   int verify_client = SSL_VERIFY_NONE;
 
+#ifndef LIBRESSL_VERSION_NUMBER
   if (configure_ssl_fips_mode(ssl_fips_mode) != 1) {
     G_ERROR("Error setting the ssl fips mode");
     goto error;
   }
+#endif
 
   SSL_library_init();
   SSL_load_error_strings();
@@ -622,7 +626,7 @@ error:
 void xcom_cleanup_ssl() {
   if (!xcom_use_ssl()) return;
 
-#if OPENSSL_VERSION_NUMBER < 0x10100000L
+#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
   ERR_remove_thread_state(0);
 #endif /* OPENSSL_VERSION_NUMBER < 0x10100000L */
 }
