@@ -242,12 +242,18 @@ IF(WIN32)
   LIST(APPEND LIBS_TO_MERGE auth_win_client)
 ENDIF()
 
-# LDAP authentication SASL client plugin
-MESSAGE(STATUS "Creating LDAP authentication SASL client library.")
-ADD_SUBDIRECTORY(authentication_ldap)
-  
-# Merge several convenience libraries into one big perconaserverclient
-MERGE_CONVENIENCE_LIBRARIES(perconaserverclient ${LIBS_TO_MERGE} COMPONENT Development)
+IF(WITHOUT_CLIENTLIBS)
+  # Merge several convenience libraries into one big perconaserverclient
+  MERGE_CONVENIENCE_LIBRARIES(perconaserverclient ${LIBS_TO_MERGE} COMPONENT Development SKIP_INSTALL)
+ELSE(WITHOUT_CLIENTLIBS)
+  # LDAP authentication SASL client plugin
+  MESSAGE(STATUS "Creating LDAP authentication SASL client library.")
+  ADD_SUBDIRECTORY(authentication_ldap)
+
+  # Merge several convenience libraries into one big perconaserverclient
+  MERGE_CONVENIENCE_LIBRARIES(perconaserverclient ${LIBS_TO_MERGE} COMPONENT Development)
+ENDIF(WITHOUT_CLIENTLIBS)
+
 TARGET_LINK_LIBRARIES(perconaserverclient PRIVATE ${LIBS_TO_LINK})
 
 # Visual Studio users need debug  static library for debug projects
@@ -283,12 +289,22 @@ ENDIF()
 
 # Merge several convenience libraries into one big perconaserverclient
 # and link them together into shared library.
+IF(WITHOUT_CLIENTLIBS)
+MERGE_LIBRARIES_SHARED(libmysql ${LIBS_TO_MERGE}
+  EXPORTS
+  ${CLIENT_API_FUNCTIONS}
+  ${CLIENT_API_FUNCTIONS_UNDOCUMENTED}
+  ${CLIENT_API_NONBLOCKING_FUNCTIONS}
+  COMPONENT SharedLibraries
+  SKIP_INSTALL )
+ELSE(WITHOUT_CLIENTLIBS)
 MERGE_LIBRARIES_SHARED(libmysql ${LIBS_TO_MERGE}
   EXPORTS
   ${CLIENT_API_FUNCTIONS}
   ${CLIENT_API_FUNCTIONS_UNDOCUMENTED}
   ${CLIENT_API_NONBLOCKING_FUNCTIONS}
   COMPONENT SharedLibraries)
+ENDIF(WITHOUT_CLIENTLIBS)
 TARGET_LINK_LIBRARIES(libmysql PRIVATE ${LIBS_TO_LINK})
 
 IF(WIN32)
