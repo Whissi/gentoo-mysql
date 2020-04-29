@@ -4717,6 +4717,7 @@ static Sys_var_ulong Sys_max_execution_time(
     HINT_UPDATEABLE SESSION_VAR(max_execution_time), CMD_LINE(REQUIRED_ARG),
     VALID_RANGE(0, ULONG_MAX), DEFAULT(0), BLOCK_SIZE(1));
 
+#ifndef LIBRESSL_VERSION_NUMBER
 static bool update_fips_mode(sys_var *, THD *, enum_var_type) {
   char ssl_err_string[OPENSSL_ERROR_LENGTH] = {'\0'};
   if (set_fips_mode(opt_ssl_fips_mode, ssl_err_string) != 1) {
@@ -4727,15 +4728,31 @@ static bool update_fips_mode(sys_var *, THD *, enum_var_type) {
     return false;
   }
 }
+#endif
 
-static const char *ssl_fips_mode_names[] = {"OFF", "ON", "STRICT", nullptr};
+#if defined(LIBRESSL_VERSION_NUMBER)
+static const char *ssl_fips_mode_names[] = {"OFF", 0};
+#else
+static const char *ssl_fips_mode_names[] = {"OFF", "ON", "STRICT", 0};
+#endif
+
 static Sys_var_enum Sys_ssl_fips_mode(
     "ssl_fips_mode",
     "SSL FIPS mode (applies only for OpenSSL); "
+#ifndef LIBRESSL_VERSION_NUMBER
     "permitted values are: OFF, ON, STRICT",
+#else
+    "permitted values are: OFF",
+#endif
     GLOBAL_VAR(opt_ssl_fips_mode), CMD_LINE(REQUIRED_ARG, OPT_SSL_FIPS_MODE),
     ssl_fips_mode_names, DEFAULT(0), NO_MUTEX_GUARD, NOT_IN_BINLOG,
-    ON_CHECK(nullptr), ON_UPDATE(update_fips_mode), nullptr);
+    ON_CHECK(NULL),
+#ifndef LIBRESSL_VERSION_NUMBER
+    ON_UPDATE(update_fips_mode),
+#else
+    ON_UPDATE(NULL),
+#endif
+    NULL);
 
 static Sys_var_bool Sys_auto_generate_certs(
     "auto_generate_certs",
