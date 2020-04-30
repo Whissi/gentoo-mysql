@@ -414,7 +414,7 @@ ELSE()
     ${CMAKE_CURRENT_BINARY_DIR}/${PKGCONFIG_FILE}
     ESCAPE_QUOTES @ONLY)
 
-  IF(INSTALL_PKGCONFIGDIR)
+  IF(INSTALL_PKGCONFIGDIR AND NOT WITHOUT_CLIENTLIBS)
     MESSAGE(STATUS "INSTALL ${PKGCONFIG_FILE} ${INSTALL_PKGCONFIGDIR}")
     INSTALL(FILES
       ${CMAKE_CURRENT_BINARY_DIR}/${PKGCONFIG_FILE}
@@ -427,18 +427,23 @@ ELSE()
   # mysqld_safe used in mtr even for systemd platforms
   IF(WITH_SYSTEMD)
     SET(BIN_SCRIPTS
-      mysql_config
       mysqldumpslow
       mysqld_safe
       )
   ELSE()
     SET(BIN_SCRIPTS
-      mysql_config
       mysqldumpslow
       mysqld_multi
       mysqld_safe
       )
   ENDIF()
+
+  IF(NOT WITHOUT_CLIENTLIBS)
+    SET(BIN_SCRIPTS
+      ${BIN_SCRIPTS}
+      mysql_config
+    )
+  ENDIF(NOT WITHOUT_CLIENTLIBS)
 
   FOREACH(file ${BIN_SCRIPTS})
     IF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${file}.sh)
