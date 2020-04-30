@@ -7987,6 +7987,7 @@ int STDCALL mysql_options(MYSQL *mysql, enum mysql_option option,
         return 1;
       break;
     case MYSQL_OPT_SSL_FIPS_MODE: {
+#if !defined(LIBRESSL_VERSION_NUMBER)
       char ssl_err_string[OPENSSL_ERROR_LENGTH] = {'\0'};
       ENSURE_EXTENSIONS_PRESENT(&mysql->options);
       mysql->options.extension->ssl_fips_mode = *static_cast<const uint *>(arg);
@@ -7998,6 +7999,7 @@ int STDCALL mysql_options(MYSQL *mysql, enum mysql_option option,
             "Set Fips mode ON/STRICT failed, detail: '%s'.", ssl_err_string);
         return 1;
       }
+#endif
     } break;
     case MYSQL_OPT_SSL_MODE:
       ENSURE_EXTENSIONS_PRESENT(&mysql->options);
