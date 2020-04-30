@@ -161,6 +161,8 @@ get_tty_password
 # will have a FR to replace this for decent name/functionality and document it.
 my_load_defaults
 handle_options
+dynstr_append_os_quoted
+strfill
 
 CACHE INTERNAL "Undocumented functions exported by client API in version 20.0"
 
