@@ -580,7 +580,9 @@ MYSQL_CHECK_SSL()
 # Add system/bundled editline.
 MYSQL_CHECK_EDITLINE()
 # Add libevent
-MYSQL_CHECK_LIBEVENT()
+IF(NOT WITHOUT_SERVER)
+  MYSQL_CHECK_LIBEVENT()
+ENDIF()
 # Add lz4 library
 MYSQL_CHECK_LZ4()
 # Add SASL library
@@ -739,11 +741,11 @@ ENDIF()
 # scripts/mysql_config depends on client and server targets loaded above.
 # It is referenced by some of the directories below, so we insert it here.
 ADD_SUBDIRECTORY(scripts)
+ADD_SUBDIRECTORY(support-files)
 
 IF(NOT WITHOUT_SERVER)
   ADD_SUBDIRECTORY(mysql-test)
   ADD_SUBDIRECTORY(mysql-test/lib/My/SafeProcess)
-  ADD_SUBDIRECTORY(support-files)
   IF(EXISTS ${CMAKE_SOURCE_DIR}/internal/CMakeLists.txt)
     ADD_SUBDIRECTORY(internal)
   ENDIF()
