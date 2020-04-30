@@ -34,6 +34,7 @@
 #include <m_string.h>
 #include <stdarg.h>
 #include <m_ctype.h>
+#include "mysql/psi/mysql_file.h"
 
 #include "mysql/psi/mysql_file.h"
 
