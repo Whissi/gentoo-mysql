@@ -71,11 +71,16 @@ ADD_CUSTOM_TARGET(GenError
 # Set InnoDB mutex type
 ADD_DEFINITIONS(-DMUTEX_EVENT)
 
-MYSQL_ADD_EXECUTABLE(my_print_defaults my_print_defaults.c)
+IF(NOT WITHOUT_CLIENTLIBS)
+  MYSQL_ADD_EXECUTABLE(my_print_defaults my_print_defaults.c)
+  MYSQL_ADD_EXECUTABLE(perror perror.c)
+ELSE(NOT WITHOUT_CLIENTLIBS)
+  ADD_EXECUTABLE(my_print_defaults my_print_defaults.c)
+  ADD_EXECUTABLE(perror perror.c)
+ENDIF(NOT WITHOUT_CLIENTLIBS)
 TARGET_LINK_LIBRARIES(my_print_defaults mysys mysys_ssl)
 SET_TARGET_PROPERTIES(my_print_defaults PROPERTIES LINKER_LANGUAGE CXX)
 
-MYSQL_ADD_EXECUTABLE(perror perror.c)
 ADD_DEPENDENCIES(perror GenError)
 TARGET_LINK_LIBRARIES(perror mysys mysys_ssl)
 SET_TARGET_PROPERTIES(perror PROPERTIES LINKER_LANGUAGE CXX)
@@ -94,10 +99,15 @@ ENDIF()
 MYSQL_ADD_EXECUTABLE(replace replace.c)
 TARGET_LINK_LIBRARIES(replace mysys)
 
-MYSQL_ADD_EXECUTABLE(lz4_decompress lz4_decompress.cc)
-TARGET_LINK_LIBRARIES(lz4_decompress ${LZ4_LIBRARY})
+IF(NOT WITHOUT_CLIENTLIBS)
+  MYSQL_ADD_EXECUTABLE(lz4_decompress lz4_decompress.cc)
+  MYSQL_ADD_EXECUTABLE(zlib_decompress zlib_decompress.cc)
+ELSE(NOT WITHOUT_CLIENTLIBS)
+  ADD_EXECUTABLE(lz4_decompress lz4_decompress.cc)
+  ADD_EXECUTABLE(zlib_decompress zlib_decompress.cc)
+ENDIF(NOT WITHOUT_CLIENTLIBS)
 
-MYSQL_ADD_EXECUTABLE(zlib_decompress zlib_decompress.cc)
+TARGET_LINK_LIBRARIES(lz4_decompress ${LZ4_LIBRARY})
 TARGET_LINK_LIBRARIES(zlib_decompress ${ZLIB_LIBRARY})
 
 IF(WITH_INNOBASE_STORAGE_ENGINE)
