@@ -8,11 +8,11 @@ file(REMOVE_RECURSE
   "CMakeFiles/util_static.dir/minicron.cc.o"
   "CMakeFiles/util_static.dir/partitioned_counter.cc.o"
   "CMakeFiles/util_static.dir/queue.cc.o"
-  "CMakeFiles/util_static.dir/threadpool.cc.o"
   "CMakeFiles/util_static.dir/scoped_malloc.cc.o"
+  "CMakeFiles/util_static.dir/threadpool.cc.o"
   "CMakeFiles/util_static.dir/x1764.cc.o"
-  "libutil_static.pdb"
   "libutil_static.a"
+  "libutil_static.pdb"
 )
 
 # Per-language clean rules from dependency scanning.

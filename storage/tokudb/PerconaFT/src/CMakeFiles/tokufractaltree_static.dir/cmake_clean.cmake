@@ -1,8 +1,8 @@
 file(REMOVE_RECURSE
-  "tokufractaltree_static_depends.cc"
   "CMakeFiles/tokufractaltree_static.dir/tokufractaltree_static_depends.cc.o"
-  "libtokufractaltree_static.pdb"
   "libtokufractaltree_static.a"
+  "libtokufractaltree_static.pdb"
+  "tokufractaltree_static_depends.cc"
 )
 
 # Per-language clean rules from dependency scanning.

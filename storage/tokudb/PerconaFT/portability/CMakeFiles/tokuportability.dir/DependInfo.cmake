@@ -22,10 +22,9 @@ set(CMAKE_CXX_COMPILER_ID "GNU")
 set(CMAKE_TARGET_DEFINITIONS_CXX
   "HAVE_CONFIG_H"
   "HAVE_LIBEVENT2"
-  "HAVE_OPENSSL"
   "LZ4_DISABLE_DEPRECATE_WARNINGS"
   "MYSQL_TOKUDB_ENGINE=1"
-  "MYSQL_VERSION_ID=80019"
+  "MYSQL_VERSION_ID=80020"
   "RAPIDJSON_NO_SIZETYPEDEFINE"
   "RAPIDJSON_SCHEMA_USE_INTERNALREGEX=0"
   "RAPIDJSON_SCHEMA_USE_STDREGEX=1"
@@ -42,28 +41,28 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
   "__STDC_FORMAT_MACROS"
   "__STDC_LIMIT_MACROS"
   "__STDC_WANT_LIB_EXT1__=1"
+  "tokuportability_EXPORTS"
   )
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "storage/tokudb/PerconaFT/buildheader"
-  "extra/rapidjson/include"
-  "extra/lz4"
-  "extra/zstd/lib"
   "."
   "include"
   "storage/tokudb/PerconaFT/./xz/include"
   "storage/tokudb/PerconaFT/./snappy/include"
   "storage/tokudb/PerconaFT/portability"
   "storage/tokudb/PerconaFT"
-  "/usr/local/include"
+  "extra/rapidjson/include"
+  "extra/lz4"
+  "extra/zstd/lib"
   )
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
   "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/mysys/CMakeFiles/mysys.dir/DependInfo.cmake"
-  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/mysys/CMakeFiles/mytime.dir/DependInfo.cmake"
   "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/strings/CMakeFiles/strings.dir/DependInfo.cmake"
+  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/mysys/CMakeFiles/mytime.dir/DependInfo.cmake"
   "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/extra/zstd/CMakeFiles/zstd.dir/DependInfo.cmake"
   )
 

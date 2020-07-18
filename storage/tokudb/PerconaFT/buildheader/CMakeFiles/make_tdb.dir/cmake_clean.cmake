@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/make_tdb.dir/make_tdb.cc.o"
-  "make_tdb.pdb"
   "make_tdb"
+  "make_tdb.pdb"
 )
 
 # Per-language clean rules from dependency scanning.

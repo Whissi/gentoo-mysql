@@ -18,10 +18,9 @@ set(CMAKE_CXX_COMPILER_ID "GNU")
 set(CMAKE_TARGET_DEFINITIONS_CXX
   "HAVE_CONFIG_H"
   "HAVE_LIBEVENT2"
-  "HAVE_OPENSSL"
   "LZ4_DISABLE_DEPRECATE_WARNINGS"
   "MYSQL_TOKUDB_ENGINE=1"
-  "MYSQL_VERSION_ID=80019"
+  "MYSQL_VERSION_ID=80020"
   "RAPIDJSON_NO_SIZETYPEDEFINE"
   "RAPIDJSON_SCHEMA_USE_INTERNALREGEX=0"
   "RAPIDJSON_SCHEMA_USE_STDREGEX=1"
@@ -43,17 +42,16 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "storage/tokudb/PerconaFT/buildheader"
-  "extra/rapidjson/include"
-  "extra/lz4"
-  "extra/zstd/lib"
   "."
   "include"
   "storage/tokudb/PerconaFT/./xz/include"
   "storage/tokudb/PerconaFT/./snappy/include"
   "storage/tokudb/PerconaFT/portability"
   "storage/tokudb/PerconaFT"
-  "/usr/local/include"
   "storage/tokudb/PerconaFT/locktree"
+  "extra/rapidjson/include"
+  "extra/lz4"
+  "extra/zstd/lib"
   )
 
 # Targets to which this target links.

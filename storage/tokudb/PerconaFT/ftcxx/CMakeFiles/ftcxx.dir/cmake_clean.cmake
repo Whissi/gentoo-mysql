@@ -3,8 +3,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/ftcxx.dir/cursor.cpp.o"
   "CMakeFiles/ftcxx.dir/db_env.cpp.o"
   "CMakeFiles/ftcxx.dir/malloc_utils.cpp.o"
-  "libftcxx.pdb"
   "libftcxx.a"
+  "libftcxx.pdb"
 )
 
 # Per-language clean rules from dependency scanning.

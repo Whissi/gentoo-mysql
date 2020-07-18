@@ -4,11 +4,11 @@
 # 
 # This file includes the relevant testing commands required for 
 # testing this directory and lists subdirectories to be tested as well.
-subdirs(buildheader)
-subdirs(util)
-subdirs(portability)
-subdirs(ft)
-subdirs(locktree)
-subdirs(src)
-subdirs(ftcxx)
-subdirs(tools)
+subdirs("buildheader")
+subdirs("util")
+subdirs("portability")
+subdirs("ft")
+subdirs("locktree")
+subdirs("src")
+subdirs("ftcxx")
+subdirs("tools")

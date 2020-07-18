@@ -18,7 +18,7 @@
 #include "rocksdb/slice.h"
 #include "util/stop_watch.h"
 
-namespace rocksdb {
+namespace ROCKSDB_NAMESPACE {
 
 class Comparator;
 class Iterator;
@@ -78,7 +78,7 @@ class MergeHelper {
   //
   // REQUIRED: The first key in the input is not corrupted.
   Status MergeUntil(InternalIterator* iter,
-                    RangeDelAggregator* range_del_agg = nullptr,
+                    CompactionRangeDelAggregator* range_del_agg = nullptr,
                     const SequenceNumber stop_before = 0,
                     const bool at_bottom = false);
 
@@ -191,4 +191,4 @@ class MergeOutputIterator {
   std::vector<Slice>::const_reverse_iterator it_values_;
 };
 
-} // namespace rocksdb
+}  // namespace ROCKSDB_NAMESPACE

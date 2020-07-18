@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/tokudb_dump.dir/tokudb_dump.cc.o"
-  "tokudb_dump.pdb"
   "tokudb_dump"
+  "tokudb_dump.pdb"
 )
 
 # Per-language clean rules from dependency scanning.

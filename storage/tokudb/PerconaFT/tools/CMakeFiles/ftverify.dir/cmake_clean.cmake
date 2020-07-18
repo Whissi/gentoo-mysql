@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/ftverify.dir/ftverify.cc.o"
-  "ftverify.pdb"
   "ftverify"
+  "ftverify.pdb"
 )
 
 # Per-language clean rules from dependency scanning.

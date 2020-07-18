@@ -30,7 +30,7 @@ set(CMAKE_CXX_COMPILER_ID "GNU")
 set(CMAKE_TARGET_DEFINITIONS_CXX
   "HAVE_CONFIG_H"
   "HAVE_LIBEVENT2"
-  "HAVE_OPENSSL"
+  "HotBackup_EXPORTS"
   "LZ4_DISABLE_DEPRECATE_WARNINGS"
   "RAPIDJSON_NO_SIZETYPEDEFINE"
   "RAPIDJSON_SCHEMA_USE_INTERNALREGEX=0"
@@ -48,11 +48,11 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
+  "."
+  "include"
   "extra/rapidjson/include"
   "extra/lz4"
   "extra/zstd/lib"
-  "."
-  "include"
   )
 
 # Targets to which this target links.

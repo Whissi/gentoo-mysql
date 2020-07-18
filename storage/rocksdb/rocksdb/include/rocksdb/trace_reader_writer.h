@@ -7,7 +7,7 @@
 
 #include "rocksdb/env.h"
 
-namespace rocksdb {
+namespace ROCKSDB_NAMESPACE {
 
 // Allow custom implementations of TraceWriter and TraceReader.
 // By default, RocksDB provides a way to capture the traces to a file using the
@@ -24,6 +24,7 @@ class TraceWriter {
 
   virtual Status Write(const Slice& data) = 0;
   virtual Status Close() = 0;
+  virtual uint64_t GetFileSize() = 0;
 };
 
 // TraceReader allows reading RocksDB traces from any system, one operation at
@@ -44,4 +45,4 @@ Status NewFileTraceWriter(Env* env, const EnvOptions& env_options,
 Status NewFileTraceReader(Env* env, const EnvOptions& env_options,
                           const std::string& trace_filename,
                           std::unique_ptr<TraceReader>* trace_reader);
-}  // namespace rocksdb
+}  // namespace ROCKSDB_NAMESPACE

@@ -99,17 +99,6 @@ add_percona_yum_repo(){
     return
 }
 
-add_percona_apt_repo(){
-  if [ ! -f /etc/apt/sources.list.d/percona-dev.list ]; then
-    cat >/etc/apt/sources.list.d/percona-dev.list <<EOL
-deb http://jenkins.percona.com/apt-repo/ @@DIST@@ main
-deb-src http://jenkins.percona.com/apt-repo/ @@DIST@@ main
-EOL
-    sed -i "s:@@DIST@@:$OS_NAME:g" /etc/apt/sources.list.d/percona-dev.list
-  fi
-  return
-}
-
 get_sources(){
     cd "${WORKDIR}"
     if [ "${SOURCE}" = 0 ]
@@ -258,15 +247,18 @@ get_sources(){
 
 get_system(){
     if [ -f /etc/redhat-release ]; then
+	GLIBC_VER_TMP="$(rpm glibc -qa --qf %{VERSION})"
         RHEL=$(rpm --eval %rhel)
         ARCH=$(echo $(uname -m) | sed -e 's:i686:i386:g')
         OS_NAME="el$RHEL"
         OS="rpm"
     else
+	GLIBC_VER_TMP="$(dpkg-query -W -f='${Version}' libc6 | awk -F'-' '{print $1}')"
         ARCH=$(uname -m)
         OS_NAME="$(lsb_release -sc)"
         OS="deb"
     fi
+    export GLIBC_VER=".glibc${GLIBC_VER_TMP}"
     return
 }
 
@@ -287,11 +279,12 @@ install_deps() {
         RHEL=$(rpm --eval %rhel)
         ARCH=$(echo $(uname -m) | sed -e 's:i686:i386:g')
         add_percona_yum_repo
-        yum -y install http://www.percona.com/downloads/percona-release/redhat/0.1-4/percona-release-0.1-4.noarch.rpm || true
+        yum install -y https://repo.percona.com/yum/percona-release-latest.noarch.rpm
+        percona-release enable tools testing
         yum -y install epel-release
         yum -y install git numactl-devel rpm-build gcc-c++ gperf ncurses-devel perl readline-devel openssl-devel jemalloc zstd zstd-devel
         yum -y install time zlib-devel libaio-devel bison cmake3 cmake pam-devel libeatmydata jemalloc-devel pkg-config
-        yum -y install perl-Time-HiRes libcurl-devel openldap-devel unzip wget libcurl-devel
+        yum -y install perl-Time-HiRes libcurl-devel openldap-devel unzip wget libcurl-devel patchelf
         yum -y install perl-Env perl-Data-Dumper perl-JSON MySQL-python perl-Digest perl-Digest-MD5 perl-Digest-Perl-MD5 || true
         if [ "${RHEL}" -lt 8 ]; then
             until yum -y install centos-release-scl; do
@@ -319,10 +312,11 @@ install_deps() {
         fi
     else
         apt-get -y install dirmngr || true
-        add_percona_apt_repo
         apt-get update
         apt-get -y install dirmngr || true
         apt-get -y install lsb-release wget
+        wget https://repo.percona.com/apt/percona-release_latest.$(lsb_release -sc)_all.deb && dpkg -i percona-release_latest.$(lsb_release -sc)_all.deb
+        percona-release enable tools testing
         export DEBIAN_FRONTEND="noninteractive"
         export DIST="$(lsb_release -sc)"
             until sudo apt-get update; do
@@ -330,10 +324,6 @@ install_deps() {
             echo "waiting"
         done
         apt-get -y purge eatmydata || true
-        echo "deb http://jenkins.percona.com/apt-repo/ ${DIST} main" > percona-dev.list
-        mv -f percona-dev.list /etc/apt/sources.list.d/
-        wget -q -O - http://jenkins.percona.com/apt-repo/8507EFA5.pub | sudo apt-key add -
-        wget -q -O - http://jenkins.percona.com/apt-repo/CD2EFD2A.pub | sudo apt-key add -
 
         apt-get update
         apt-get -y install psmisc pkg-config
@@ -341,21 +331,25 @@ install_deps() {
         apt-get -y install dh-systemd || true
         apt-get -y install curl bison cmake perl libssl-dev gcc g++ libaio-dev libldap2-dev libwrap0-dev gdb unzip gawk
         apt-get -y install lsb-release libmecab-dev libncurses5-dev libreadline-dev libpam-dev zlib1g-dev libcurl4-openssl-dev
-        apt-get -y install libldap2-dev libnuma-dev libjemalloc-dev libc6-dbg valgrind libjson-perl python-mysqldb libsasl2-dev
+        apt-get -y install libldap2-dev libnuma-dev libjemalloc-dev libc6-dbg valgrind libjson-perl libsasl2-dev patchelf
+        if [ x"${DIST}" = xfocal ]; then
+            apt-get -y install python3-mysqldb
+        else
+            apt-get -y install python-mysqldb
+        fi
         apt-get -y install libeatmydata
         apt-get -y install libmecab2 mecab mecab-ipadic
         apt-get -y install build-essential devscripts doxygen doxygen-gui graphviz rsync
         apt-get -y install cmake autotools-dev autoconf automake build-essential devscripts debconf debhelper fakeroot libaio-dev
         apt-get -y install ccache libevent-dev libgsasl7 liblz4-dev libre2-dev libtool po-debconf
-        if [ x"${DIST}" = xcosmic -o x"${DIST}" = xbionic -o x"${DIST}" = xdisco -o x"${DIST}" = xbuster ]; then
+        if [ x"${DIST}" = xfocal -o x"${DIST}" = xbionic -o x"${DIST}" = xdisco -o x"${DIST}" = xbuster ]; then
             apt-get -y install libeatmydata1
         fi
-        if [ x"${DIST}" = xcosmic -o x"${DIST}" = xbionic -o x"${DIST}" = xstretch -o x"${DIST}" = xdisco -o x"${DIST}" = xbuster ]; then
+        if [ x"${DIST}" = xfocal -o x"${DIST}" = xbionic -o x"${DIST}" = xstretch -o x"${DIST}" = xdisco -o x"${DIST}" = xbuster ]; then
             apt-get -y install libzstd-dev
         else
             apt-get -y install libzstd1-dev
         fi
-
     fi
     if [ ! -d /usr/local/percona-subunit2junitxml ]; then
         cd /usr/local
@@ -444,7 +438,6 @@ build_srpm(){
     tar vxzf ${WORKDIR}/${TARFILE} --wildcards '*/build-ps/rpm/filter-provides.sh' --strip=3
     tar vxzf ${WORKDIR}/${TARFILE} --wildcards '*/build-ps/rpm/filter-requires.sh' --strip=3
     tar vxzf ${WORKDIR}/${TARFILE} --wildcards '*/build-ps/rpm/mysql_config.sh' --strip=3
-    tar vxzf ${WORKDIR}/${TARFILE} --wildcards '*/build-ps/rpm/my_config.h' --strip=3
     #
     cd ${WORKDIR}
     #
@@ -657,7 +650,7 @@ build_deb(){
     cd ${DIRNAME}
     dch -b -m -D "$DEBIAN_VERSION" --force-distribution -v "${VERSION}-${RELEASE}-${DEB_RELEASE}.${DEBIAN_VERSION}" 'Update distribution'
 
-    if [ ${DEBIAN_VERSION} != trusty -a ${DEBIAN_VERSION} != xenial -a ${DEBIAN_VERSION} != jessie -a ${DEBIAN_VERSION} != stretch -a ${DEBIAN_VERSION} != artful -a ${DEBIAN_VERSION} != bionic -a ${DEBIAN_VERSION} != cosmic -a "${DEBIAN_VERSION}" != disco -a "${DEBIAN_VERSION}" != buster ]; then
+    if [ ${DEBIAN_VERSION} != trusty -a ${DEBIAN_VERSION} != xenial -a ${DEBIAN_VERSION} != jessie -a ${DEBIAN_VERSION} != stretch -a ${DEBIAN_VERSION} != artful -a ${DEBIAN_VERSION} != bionic -a ${DEBIAN_VERSION} != focal -a "${DEBIAN_VERSION}" != disco -a "${DEBIAN_VERSION}" != buster ]; then
         gcc47=$(which gcc-4.7 2>/dev/null || true)
         if [ -x "${gcc47}" ]; then
             export CC=gcc-4.7
@@ -675,7 +668,7 @@ build_deb(){
         sed -i 's/export CXXFLAGS=/export CXXFLAGS=-Wno-error=date-time /' debian/rules
     fi
 
-    if [ ${DEBIAN_VERSION} = "stretch" -o ${DEBIAN_VERSION} = "bionic" -o ${DEBIAN_VERSION} = "artful" -o ${DEBIAN_VERSION} = "buster" -o ${DEBIAN_VERSION} = "disco" ]; then
+    if [ ${DEBIAN_VERSION} = "stretch" -o ${DEBIAN_VERSION} = "bionic" -o ${DEBIAN_VERSION} = "focal" -o ${DEBIAN_VERSION} = "buster" -o ${DEBIAN_VERSION} = "disco" ]; then
         sed -i 's/export CFLAGS=/export CFLAGS=-Wno-error=deprecated-declarations -Wno-error=unused-function -Wno-error=unused-variable -Wno-error=unused-parameter -Wno-error=date-time /' debian/rules
         sed -i 's/export CXXFLAGS=/export CXXFLAGS=-Wno-error=deprecated-declarations -Wno-error=unused-function -Wno-error=unused-variable -Wno-error=unused-parameter -Wno-error=date-time /' debian/rules
     fi
@@ -723,16 +716,6 @@ build_tarball(){
     #
     export CFLAGS=$(rpm --eval %{optflags} | sed -e "s|march=i386|march=i686|g")
     export CXXFLAGS="${CFLAGS}"
-    if [ -f /etc/redhat-release ]; then
-        SSL_VER_TMP=$(yum list installed|grep -i openssl|head -n1|awk '{print $2}'|awk -F "-" '{print $1}'|sed 's/\.//g'|sed 's/[a-z]$//' | awk -F':' '{print $2}')
-        if [ -z "${SSL_VER_TMP}" ]; then
-            SSL_VER_TMP=$(yum list installed|grep -i openssl|head -n1|awk '{print $2}'|awk -F "-" '{print $1}'|sed 's/\.//g'|sed 's/[a-z]$//')
-        fi
-        export SSL_VER=".ssl${SSL_VER_TMP}"
-    else
-        SSL_VER_TMP=$(dpkg -l|grep -i libssl|grep -v "libssl\-"|head -n1|awk '{print $2}'|awk -F ":" '{print $1}'|sed 's/libssl/ssl/g'|sed 's/\.//g')
-        export SSL_VER=".${SSL_VER_TMP}"
-    fi
 
     build_mecab_lib
     build_mecab_dict

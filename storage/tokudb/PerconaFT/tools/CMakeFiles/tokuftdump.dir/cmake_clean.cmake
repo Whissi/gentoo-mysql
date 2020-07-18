@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/tokuftdump.dir/tokuftdump.cc.o"
-  "tokuftdump.pdb"
   "tokuftdump"
+  "tokuftdump.pdb"
 )
 
 # Per-language clean rules from dependency scanning.

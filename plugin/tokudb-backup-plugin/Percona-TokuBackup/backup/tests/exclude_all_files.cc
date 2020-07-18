@@ -34,6 +34,7 @@ Copyright (c) 2006, 2015, Percona and/or its affiliates. All rights reserved.
 
 #ident "$Id$"
 
+#undef NDEBUG
 #include <assert.h>
 #include <errno.h>
 #include <sys/stat.h>
@@ -119,7 +120,7 @@ static int check_it(char *dst, char *magic, int size, int count)
     if (backup_fd < 0) {
         perror("check_it() could not open destination file");
         printf("Expected file %s/magic%d apparently excluded from backup.\n", dst, count);
-        assert(_errno_ == ENOENT);
+        check(_errno_ == ENOENT);
         return 0;
     } else {
         printf("FAILURE: check_it() was able to open file %s/magic%d\n.", dst, count);
@@ -139,7 +140,7 @@ static int check_it(char *dst, char *magic, int size, int count)
     return r;
 }
 
-const int SIZE = 7;
+const int SIZE = 16;
 char buf[SIZE] = {0};
 
 struct SourceAndDestinationDirectories {

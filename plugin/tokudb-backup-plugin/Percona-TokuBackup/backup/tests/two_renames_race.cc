@@ -43,7 +43,6 @@ Copyright (c) 2006, 2015, Percona and/or its affiliates. All rights reserved.
 #include "backup_test_helpers.h"
 #include "backup_debug.h"
 
-const int N=10;
 const int N_FNAMES = 2;
 
 void* do_backups(void *v) {
@@ -83,7 +82,7 @@ void* do_rename(void *p) {
     return p;
 }
 
-int test_main(int argc __attribute__((__unused__)), const char *argv[] __attribute__((__unused__))) {
+int test_two_renames(void) {
     int r = 0;
     setup_source();
     setup_destination();
@@ -157,5 +156,21 @@ int test_main(int argc __attribute__((__unused__)), const char *argv[] __attribu
 
     //    cleanup_dirs();
     free((void*)src);
+    return r;
+}
+
+int test_main(int argc, const char *argv[]) {
+    int ntests = 1;
+    for (int i=1; i<argc; i++) {
+        if (strcmp(argv[i], "--ntests") == 0 && i+1 < argc) {
+            ntests = atoi(argv[++i]);
+        }
+    }
+    int r = 0;
+    for (int i=0; i<ntests; i++) {
+        r = test_two_renames();
+        if (r != 0)
+            break;
+    }
     return r;
 }

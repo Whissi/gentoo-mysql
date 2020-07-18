@@ -1,8 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/generate_log_code"
   "log_code.cc"
-  "log_print.cc"
   "log_header.h"
+  "log_print.cc"
 )
 
 # Per-language clean rules from dependency scanning.

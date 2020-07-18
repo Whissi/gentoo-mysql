@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/tokuportability_static_conv.dir/huge_page_detection.cc.o"
   "CMakeFiles/tokuportability_static_conv.dir/file.cc.o"
+  "CMakeFiles/tokuportability_static_conv.dir/huge_page_detection.cc.o"
   "CMakeFiles/tokuportability_static_conv.dir/memory.cc.o"
   "CMakeFiles/tokuportability_static_conv.dir/os_malloc.cc.o"
   "CMakeFiles/tokuportability_static_conv.dir/portability.cc.o"
@@ -10,8 +10,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/tokuportability_static_conv.dir/toku_path.cc.o"
   "CMakeFiles/tokuportability_static_conv.dir/toku_pthread.cc.o"
   "CMakeFiles/tokuportability_static_conv.dir/toku_time.cc.o"
-  "libtokuportability_static_conv.pdb"
   "libtokuportability_static_conv.a"
+  "libtokuportability_static_conv.pdb"
 )
 
 # Per-language clean rules from dependency scanning.

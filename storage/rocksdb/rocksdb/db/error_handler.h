@@ -6,10 +6,11 @@
 
 #include "monitoring/instrumented_mutex.h"
 #include "options/db_options.h"
+#include "rocksdb/io_status.h"
 #include "rocksdb/listener.h"
 #include "rocksdb/status.h"
 
-namespace rocksdb {
+namespace ROCKSDB_NAMESPACE {
 
 class DBImpl;
 
@@ -33,6 +34,8 @@ class ErrorHandler {
                                      Status::SubCode subcode);
 
    Status SetBGError(const Status& bg_err, BackgroundErrorReason reason);
+
+   Status SetBGError(const IOStatus& bg_io_err, BackgroundErrorReason reason);
 
    Status GetBGError() { return bg_error_; }
 
@@ -60,7 +63,7 @@ class ErrorHandler {
     DBImpl* db_;
     const ImmutableDBOptions& db_options_;
     Status bg_error_;
-    // A seperate Status variable used to record any errors during the
+    // A separate Status variable used to record any errors during the
     // recovery process from hard errors
     Status recovery_error_;
     InstrumentedMutex* db_mutex_;
@@ -72,4 +75,4 @@ class ErrorHandler {
     void RecoverFromNoSpace();
 };
 
-}
+}  // namespace ROCKSDB_NAMESPACE

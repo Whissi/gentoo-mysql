@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/tokuportability.dir/huge_page_detection.cc.o"
   "CMakeFiles/tokuportability.dir/file.cc.o"
+  "CMakeFiles/tokuportability.dir/huge_page_detection.cc.o"
   "CMakeFiles/tokuportability.dir/memory.cc.o"
   "CMakeFiles/tokuportability.dir/os_malloc.cc.o"
   "CMakeFiles/tokuportability.dir/portability.cc.o"
