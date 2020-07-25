@@ -13,7 +13,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA
 
-IF(WITH_LDAP)
+IF(WITH_AUTHENTICATION_LDAP)
   INCLUDE (CheckLibraryExists)
   CHECK_LIBRARY_EXISTS(ldap ldap_initialize "" HAVE_LDAP)
 
