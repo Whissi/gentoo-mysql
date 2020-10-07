@@ -62,10 +62,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server
+CMAKE_SOURCE_DIR = /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server
+CMAKE_BINARY_DIR = /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server
 
 # Include any dependencies generated for this target.
 include storage/tokudb/PerconaFT/tools/CMakeFiles/tokuftdump.dir/depend.make
@@ -78,16 +78,16 @@ include storage/tokudb/PerconaFT/tools/CMakeFiles/tokuftdump.dir/flags.make
 
 storage/tokudb/PerconaFT/tools/CMakeFiles/tokuftdump.dir/tokuftdump.cc.o: storage/tokudb/PerconaFT/tools/CMakeFiles/tokuftdump.dir/flags.make
 storage/tokudb/PerconaFT/tools/CMakeFiles/tokuftdump.dir/tokuftdump.cc.o: storage/tokudb/PerconaFT/tools/tokuftdump.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object storage/tokudb/PerconaFT/tools/CMakeFiles/tokuftdump.dir/tokuftdump.cc.o"
-	cd /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/tools && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tokuftdump.dir/tokuftdump.cc.o -c /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/tools/tokuftdump.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object storage/tokudb/PerconaFT/tools/CMakeFiles/tokuftdump.dir/tokuftdump.cc.o"
+	cd /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/tools && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tokuftdump.dir/tokuftdump.cc.o -c /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/tools/tokuftdump.cc
 
 storage/tokudb/PerconaFT/tools/CMakeFiles/tokuftdump.dir/tokuftdump.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/tokuftdump.dir/tokuftdump.cc.i"
-	cd /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/tools && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/tools/tokuftdump.cc > CMakeFiles/tokuftdump.dir/tokuftdump.cc.i
+	cd /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/tools && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/tools/tokuftdump.cc > CMakeFiles/tokuftdump.dir/tokuftdump.cc.i
 
 storage/tokudb/PerconaFT/tools/CMakeFiles/tokuftdump.dir/tokuftdump.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/tokuftdump.dir/tokuftdump.cc.s"
-	cd /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/tools && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/tools/tokuftdump.cc -o CMakeFiles/tokuftdump.dir/tokuftdump.cc.s
+	cd /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/tools && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/tools/tokuftdump.cc -o CMakeFiles/tokuftdump.dir/tokuftdump.cc.s
 
 # Object files for target tokuftdump
 tokuftdump_OBJECTS = \
@@ -104,15 +104,16 @@ storage/tokudb/PerconaFT/tools/tokuftdump: storage/tokudb/PerconaFT/./xz/lib/lib
 storage/tokudb/PerconaFT/tools/tokuftdump: storage/tokudb/PerconaFT/./snappy/lib/libsnappy.a
 storage/tokudb/PerconaFT/tools/tokuftdump: storage/tokudb/PerconaFT/portability/libtokuportability_static.a
 storage/tokudb/PerconaFT/tools/tokuftdump: archive_output_directory/libperconaserverclient.a
-storage/tokudb/PerconaFT/tools/tokuftdump: //usr/lib/x86_64-linux-gnu/libz.so
-storage/tokudb/PerconaFT/tools/tokuftdump: //usr/lib/x86_64-linux-gnu/libssl.so
-storage/tokudb/PerconaFT/tools/tokuftdump: //usr/lib/x86_64-linux-gnu/libcrypto.so
-storage/tokudb/PerconaFT/tools/tokuftdump: //usr/lib/x86_64-linux-gnu/libz.so
-storage/tokudb/PerconaFT/tools/tokuftdump: //usr/lib/x86_64-linux-gnu/libssl.so
-storage/tokudb/PerconaFT/tools/tokuftdump: //usr/lib/x86_64-linux-gnu/libcrypto.so
+storage/tokudb/PerconaFT/tools/tokuftdump: /usr/lib/x86_64-linux-gnu/libz.so
+storage/tokudb/PerconaFT/tools/tokuftdump: /usr/lib/x86_64-linux-gnu/libssl.so
+storage/tokudb/PerconaFT/tools/tokuftdump: /usr/lib/x86_64-linux-gnu/libcrypto.so
+storage/tokudb/PerconaFT/tools/tokuftdump: /usr/lib/x86_64-linux-gnu/libz.so
+storage/tokudb/PerconaFT/tools/tokuftdump: /usr/lib/x86_64-linux-gnu/libssl.so
+storage/tokudb/PerconaFT/tools/tokuftdump: /usr/lib/x86_64-linux-gnu/libcrypto.so
+storage/tokudb/PerconaFT/tools/tokuftdump: extra/coredumper/src/libcoredumper.a
 storage/tokudb/PerconaFT/tools/tokuftdump: storage/tokudb/PerconaFT/tools/CMakeFiles/tokuftdump.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable tokuftdump"
-	cd /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/tools && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/tokuftdump.dir/link.txt --verbose=$(VERBOSE)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable tokuftdump"
+	cd /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/tools && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/tokuftdump.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 storage/tokudb/PerconaFT/tools/CMakeFiles/tokuftdump.dir/build: storage/tokudb/PerconaFT/tools/tokuftdump
@@ -120,10 +121,10 @@ storage/tokudb/PerconaFT/tools/CMakeFiles/tokuftdump.dir/build: storage/tokudb/P
 .PHONY : storage/tokudb/PerconaFT/tools/CMakeFiles/tokuftdump.dir/build
 
 storage/tokudb/PerconaFT/tools/CMakeFiles/tokuftdump.dir/clean:
-	cd /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/tools && $(CMAKE_COMMAND) -P CMakeFiles/tokuftdump.dir/cmake_clean.cmake
+	cd /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/tools && $(CMAKE_COMMAND) -P CMakeFiles/tokuftdump.dir/cmake_clean.cmake
 .PHONY : storage/tokudb/PerconaFT/tools/CMakeFiles/tokuftdump.dir/clean
 
 storage/tokudb/PerconaFT/tools/CMakeFiles/tokuftdump.dir/depend:
-	cd /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/tools /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/tools /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/tools/CMakeFiles/tokuftdump.dir/DependInfo.cmake --color=$(COLOR)
+	cd /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/tools /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/tools /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/tools/CMakeFiles/tokuftdump.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : storage/tokudb/PerconaFT/tools/CMakeFiles/tokuftdump.dir/depend
 

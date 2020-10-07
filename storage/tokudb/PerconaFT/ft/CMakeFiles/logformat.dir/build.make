@@ -62,10 +62,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server
+CMAKE_SOURCE_DIR = /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server
+CMAKE_BINARY_DIR = /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server
 
 # Include any dependencies generated for this target.
 include storage/tokudb/PerconaFT/ft/CMakeFiles/logformat.dir/depend.make
@@ -78,16 +78,16 @@ include storage/tokudb/PerconaFT/ft/CMakeFiles/logformat.dir/flags.make
 
 storage/tokudb/PerconaFT/ft/CMakeFiles/logformat.dir/logger/logformat.cc.o: storage/tokudb/PerconaFT/ft/CMakeFiles/logformat.dir/flags.make
 storage/tokudb/PerconaFT/ft/CMakeFiles/logformat.dir/logger/logformat.cc.o: storage/tokudb/PerconaFT/ft/logger/logformat.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object storage/tokudb/PerconaFT/ft/CMakeFiles/logformat.dir/logger/logformat.cc.o"
-	cd /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/ft && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/logformat.dir/logger/logformat.cc.o -c /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/ft/logger/logformat.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object storage/tokudb/PerconaFT/ft/CMakeFiles/logformat.dir/logger/logformat.cc.o"
+	cd /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/ft && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/logformat.dir/logger/logformat.cc.o -c /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/ft/logger/logformat.cc
 
 storage/tokudb/PerconaFT/ft/CMakeFiles/logformat.dir/logger/logformat.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/logformat.dir/logger/logformat.cc.i"
-	cd /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/ft && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/ft/logger/logformat.cc > CMakeFiles/logformat.dir/logger/logformat.cc.i
+	cd /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/ft && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/ft/logger/logformat.cc > CMakeFiles/logformat.dir/logger/logformat.cc.i
 
 storage/tokudb/PerconaFT/ft/CMakeFiles/logformat.dir/logger/logformat.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/logformat.dir/logger/logformat.cc.s"
-	cd /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/ft && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/ft/logger/logformat.cc -o CMakeFiles/logformat.dir/logger/logformat.cc.s
+	cd /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/ft && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/ft/logger/logformat.cc -o CMakeFiles/logformat.dir/logger/logformat.cc.s
 
 # Object files for target logformat
 logformat_OBJECTS = \
@@ -100,8 +100,8 @@ storage/tokudb/PerconaFT/ft/logformat: storage/tokudb/PerconaFT/ft/CMakeFiles/lo
 storage/tokudb/PerconaFT/ft/logformat: storage/tokudb/PerconaFT/ft/CMakeFiles/logformat.dir/build.make
 storage/tokudb/PerconaFT/ft/logformat: storage/tokudb/PerconaFT/portability/libtokuportability_static.a
 storage/tokudb/PerconaFT/ft/logformat: storage/tokudb/PerconaFT/ft/CMakeFiles/logformat.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable logformat"
-	cd /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/ft && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/logformat.dir/link.txt --verbose=$(VERBOSE)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable logformat"
+	cd /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/ft && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/logformat.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 storage/tokudb/PerconaFT/ft/CMakeFiles/logformat.dir/build: storage/tokudb/PerconaFT/ft/logformat
@@ -109,10 +109,10 @@ storage/tokudb/PerconaFT/ft/CMakeFiles/logformat.dir/build: storage/tokudb/Perco
 .PHONY : storage/tokudb/PerconaFT/ft/CMakeFiles/logformat.dir/build
 
 storage/tokudb/PerconaFT/ft/CMakeFiles/logformat.dir/clean:
-	cd /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/ft && $(CMAKE_COMMAND) -P CMakeFiles/logformat.dir/cmake_clean.cmake
+	cd /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/ft && $(CMAKE_COMMAND) -P CMakeFiles/logformat.dir/cmake_clean.cmake
 .PHONY : storage/tokudb/PerconaFT/ft/CMakeFiles/logformat.dir/clean
 
 storage/tokudb/PerconaFT/ft/CMakeFiles/logformat.dir/depend:
-	cd /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/ft /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/ft /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/ft/CMakeFiles/logformat.dir/DependInfo.cmake --color=$(COLOR)
+	cd /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/ft /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/ft /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/ft/CMakeFiles/logformat.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : storage/tokudb/PerconaFT/ft/CMakeFiles/logformat.dir/depend
 

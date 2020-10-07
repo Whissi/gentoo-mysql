@@ -4,29 +4,26 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/locktree/keyrange.cc" "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/locktree/CMakeFiles/locktree.dir/keyrange.cc.o"
-  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/locktree/lock_request.cc" "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/locktree/CMakeFiles/locktree.dir/lock_request.cc.o"
-  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/locktree/locktree.cc" "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/locktree/CMakeFiles/locktree.dir/locktree.cc.o"
-  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/locktree/manager.cc" "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/locktree/CMakeFiles/locktree.dir/manager.cc.o"
-  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/locktree/range_buffer.cc" "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/locktree/CMakeFiles/locktree.dir/range_buffer.cc.o"
-  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/locktree/txnid_set.cc" "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/locktree/CMakeFiles/locktree.dir/txnid_set.cc.o"
-  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/locktree/wfg.cc" "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/locktree/CMakeFiles/locktree.dir/wfg.cc.o"
+  "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/locktree/keyrange.cc" "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/locktree/CMakeFiles/locktree.dir/keyrange.cc.o"
+  "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/locktree/lock_request.cc" "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/locktree/CMakeFiles/locktree.dir/lock_request.cc.o"
+  "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/locktree/locktree.cc" "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/locktree/CMakeFiles/locktree.dir/locktree.cc.o"
+  "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/locktree/manager.cc" "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/locktree/CMakeFiles/locktree.dir/manager.cc.o"
+  "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/locktree/range_buffer.cc" "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/locktree/CMakeFiles/locktree.dir/range_buffer.cc.o"
+  "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/locktree/txnid_set.cc" "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/locktree/CMakeFiles/locktree.dir/txnid_set.cc.o"
+  "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/locktree/wfg.cc" "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/locktree/CMakeFiles/locktree.dir/wfg.cc.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
 # Preprocessor definitions for this target.
 set(CMAKE_TARGET_DEFINITIONS_CXX
   "HAVE_CONFIG_H"
-  "HAVE_LIBEVENT2"
   "LZ4_DISABLE_DEPRECATE_WARNINGS"
   "MYSQL_TOKUDB_ENGINE=1"
-  "MYSQL_VERSION_ID=80020"
+  "MYSQL_VERSION_ID=80021"
   "RAPIDJSON_NO_SIZETYPEDEFINE"
   "RAPIDJSON_SCHEMA_USE_INTERNALREGEX=0"
   "RAPIDJSON_SCHEMA_USE_STDREGEX=1"
   "TOKU_MYSQL_WITH_PFS"
-  "UNISTR_FROM_CHAR_EXPLICIT=explicit"
-  "UNISTR_FROM_STRING_EXPLICIT=explicit"
   "_DEFAULT_SOURCE"
   "_FILE_OFFSET_BITS=64"
   "_GNU_SOURCE"
@@ -57,8 +54,8 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/ft/CMakeFiles/ft.dir/DependInfo.cmake"
-  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/portability/CMakeFiles/tokuportability.dir/DependInfo.cmake"
+  "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/ft/CMakeFiles/ft.dir/DependInfo.cmake"
+  "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/portability/CMakeFiles/tokuportability.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

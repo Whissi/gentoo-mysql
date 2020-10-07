@@ -67,10 +67,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server
+CMAKE_SOURCE_DIR = /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server
+CMAKE_BINARY_DIR = /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -78,7 +78,7 @@ CMAKE_BINARY_DIR = /mnt/workspace/percona-server-8.0-source-tarballs/test/percon
 # Special rule for the target package_source
 package_source:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Run CPack packaging tool for source..."
-	cd /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server && /usr/bin/cpack --config ./CPackSourceConfig.cmake /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/CPackSourceConfig.cmake
+	cd /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server && /usr/bin/cpack --config ./CPackSourceConfig.cmake /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/CPackSourceConfig.cmake
 .PHONY : package_source
 
 # Special rule for the target package_source
@@ -89,7 +89,7 @@ package_source/fast: package_source
 # Special rule for the target package
 package: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Run CPack packaging tool..."
-	cd /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server && /usr/bin/cpack --config ./CPackConfig.cmake
+	cd /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server && /usr/bin/cpack --config ./CPackConfig.cmake
 .PHONY : package
 
 # Special rule for the target package
@@ -178,14 +178,14 @@ install/local/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	cd /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server && $(CMAKE_COMMAND) -E cmake_progress_start /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/CMakeFiles /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/buildheader//CMakeFiles/progress.marks
-	cd /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 storage/tokudb/PerconaFT/buildheader/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/CMakeFiles 0
+	cd /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server && $(CMAKE_COMMAND) -E cmake_progress_start /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/CMakeFiles /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/buildheader//CMakeFiles/progress.marks
+	cd /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 storage/tokudb/PerconaFT/buildheader/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 storage/tokudb/PerconaFT/buildheader/clean
+	cd /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 storage/tokudb/PerconaFT/buildheader/clean
 .PHONY : clean
 
 # The main clean target
@@ -195,22 +195,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 storage/tokudb/PerconaFT/buildheader/preinstall
+	cd /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 storage/tokudb/PerconaFT/buildheader/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 storage/tokudb/PerconaFT/buildheader/preinstall
+	cd /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 storage/tokudb/PerconaFT/buildheader/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 storage/tokudb/PerconaFT/buildheader/CMakeFiles/install_tdb_h.dir/rule:
-	cd /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 storage/tokudb/PerconaFT/buildheader/CMakeFiles/install_tdb_h.dir/rule
+	cd /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 storage/tokudb/PerconaFT/buildheader/CMakeFiles/install_tdb_h.dir/rule
 .PHONY : storage/tokudb/PerconaFT/buildheader/CMakeFiles/install_tdb_h.dir/rule
 
 # Convenience name for target.
@@ -220,12 +220,12 @@ install_tdb_h: storage/tokudb/PerconaFT/buildheader/CMakeFiles/install_tdb_h.dir
 
 # fast build rule for target.
 install_tdb_h/fast:
-	cd /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server && $(MAKE) $(MAKESILENT) -f storage/tokudb/PerconaFT/buildheader/CMakeFiles/install_tdb_h.dir/build.make storage/tokudb/PerconaFT/buildheader/CMakeFiles/install_tdb_h.dir/build
+	cd /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server && $(MAKE) $(MAKESILENT) -f storage/tokudb/PerconaFT/buildheader/CMakeFiles/install_tdb_h.dir/build.make storage/tokudb/PerconaFT/buildheader/CMakeFiles/install_tdb_h.dir/build
 .PHONY : install_tdb_h/fast
 
 # Convenience name for target.
 storage/tokudb/PerconaFT/buildheader/CMakeFiles/make_tdb.dir/rule:
-	cd /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 storage/tokudb/PerconaFT/buildheader/CMakeFiles/make_tdb.dir/rule
+	cd /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 storage/tokudb/PerconaFT/buildheader/CMakeFiles/make_tdb.dir/rule
 .PHONY : storage/tokudb/PerconaFT/buildheader/CMakeFiles/make_tdb.dir/rule
 
 # Convenience name for target.
@@ -235,7 +235,7 @@ make_tdb: storage/tokudb/PerconaFT/buildheader/CMakeFiles/make_tdb.dir/rule
 
 # fast build rule for target.
 make_tdb/fast:
-	cd /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server && $(MAKE) $(MAKESILENT) -f storage/tokudb/PerconaFT/buildheader/CMakeFiles/make_tdb.dir/build.make storage/tokudb/PerconaFT/buildheader/CMakeFiles/make_tdb.dir/build
+	cd /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server && $(MAKE) $(MAKESILENT) -f storage/tokudb/PerconaFT/buildheader/CMakeFiles/make_tdb.dir/build.make storage/tokudb/PerconaFT/buildheader/CMakeFiles/make_tdb.dir/build
 .PHONY : make_tdb/fast
 
 make_tdb.o: make_tdb.cc.o
@@ -244,7 +244,7 @@ make_tdb.o: make_tdb.cc.o
 
 # target to build an object file
 make_tdb.cc.o:
-	cd /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server && $(MAKE) $(MAKESILENT) -f storage/tokudb/PerconaFT/buildheader/CMakeFiles/make_tdb.dir/build.make storage/tokudb/PerconaFT/buildheader/CMakeFiles/make_tdb.dir/make_tdb.cc.o
+	cd /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server && $(MAKE) $(MAKESILENT) -f storage/tokudb/PerconaFT/buildheader/CMakeFiles/make_tdb.dir/build.make storage/tokudb/PerconaFT/buildheader/CMakeFiles/make_tdb.dir/make_tdb.cc.o
 .PHONY : make_tdb.cc.o
 
 make_tdb.i: make_tdb.cc.i
@@ -253,7 +253,7 @@ make_tdb.i: make_tdb.cc.i
 
 # target to preprocess a source file
 make_tdb.cc.i:
-	cd /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server && $(MAKE) $(MAKESILENT) -f storage/tokudb/PerconaFT/buildheader/CMakeFiles/make_tdb.dir/build.make storage/tokudb/PerconaFT/buildheader/CMakeFiles/make_tdb.dir/make_tdb.cc.i
+	cd /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server && $(MAKE) $(MAKESILENT) -f storage/tokudb/PerconaFT/buildheader/CMakeFiles/make_tdb.dir/build.make storage/tokudb/PerconaFT/buildheader/CMakeFiles/make_tdb.dir/make_tdb.cc.i
 .PHONY : make_tdb.cc.i
 
 make_tdb.s: make_tdb.cc.s
@@ -262,7 +262,7 @@ make_tdb.s: make_tdb.cc.s
 
 # target to generate assembly for a file
 make_tdb.cc.s:
-	cd /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server && $(MAKE) $(MAKESILENT) -f storage/tokudb/PerconaFT/buildheader/CMakeFiles/make_tdb.dir/build.make storage/tokudb/PerconaFT/buildheader/CMakeFiles/make_tdb.dir/make_tdb.cc.s
+	cd /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server && $(MAKE) $(MAKESILENT) -f storage/tokudb/PerconaFT/buildheader/CMakeFiles/make_tdb.dir/build.make storage/tokudb/PerconaFT/buildheader/CMakeFiles/make_tdb.dir/make_tdb.cc.s
 .PHONY : make_tdb.cc.s
 
 # Help Target
@@ -296,6 +296,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

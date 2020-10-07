@@ -62,10 +62,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server
+CMAKE_SOURCE_DIR = /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server
+CMAKE_BINARY_DIR = /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server
 
 # Utility rule file for generate_config_h.
 
@@ -86,10 +86,10 @@ storage/tokudb/PerconaFT/portability/CMakeFiles/generate_config_h.dir/build: gen
 .PHONY : storage/tokudb/PerconaFT/portability/CMakeFiles/generate_config_h.dir/build
 
 storage/tokudb/PerconaFT/portability/CMakeFiles/generate_config_h.dir/clean:
-	cd /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/portability && $(CMAKE_COMMAND) -P CMakeFiles/generate_config_h.dir/cmake_clean.cmake
+	cd /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/portability && $(CMAKE_COMMAND) -P CMakeFiles/generate_config_h.dir/cmake_clean.cmake
 .PHONY : storage/tokudb/PerconaFT/portability/CMakeFiles/generate_config_h.dir/clean
 
 storage/tokudb/PerconaFT/portability/CMakeFiles/generate_config_h.dir/depend:
-	cd /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/portability /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/portability /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/portability/CMakeFiles/generate_config_h.dir/DependInfo.cmake --color=$(COLOR)
+	cd /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/portability /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/portability /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/portability/CMakeFiles/generate_config_h.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : storage/tokudb/PerconaFT/portability/CMakeFiles/generate_config_h.dir/depend
 

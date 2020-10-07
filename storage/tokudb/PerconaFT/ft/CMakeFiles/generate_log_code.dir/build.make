@@ -62,10 +62,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server
+CMAKE_SOURCE_DIR = /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server
+CMAKE_BINARY_DIR = /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server
 
 # Utility rule file for generate_log_code.
 
@@ -78,8 +78,8 @@ storage/tokudb/PerconaFT/ft/CMakeFiles/generate_log_code: storage/tokudb/Percona
 
 
 storage/tokudb/PerconaFT/ft/log_code.cc: storage/tokudb/PerconaFT/ft/logformat
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating log_code.cc, log_print.cc, log_header.h"
-	cd /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/ft && ./logformat .
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating log_code.cc, log_print.cc, log_header.h"
+	cd /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/ft && ./logformat .
 
 storage/tokudb/PerconaFT/ft/log_print.cc: storage/tokudb/PerconaFT/ft/log_code.cc
 	@$(CMAKE_COMMAND) -E touch_nocreate storage/tokudb/PerconaFT/ft/log_print.cc
@@ -101,10 +101,10 @@ storage/tokudb/PerconaFT/ft/CMakeFiles/generate_log_code.dir/build: generate_log
 .PHONY : storage/tokudb/PerconaFT/ft/CMakeFiles/generate_log_code.dir/build
 
 storage/tokudb/PerconaFT/ft/CMakeFiles/generate_log_code.dir/clean:
-	cd /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/ft && $(CMAKE_COMMAND) -P CMakeFiles/generate_log_code.dir/cmake_clean.cmake
+	cd /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/ft && $(CMAKE_COMMAND) -P CMakeFiles/generate_log_code.dir/cmake_clean.cmake
 .PHONY : storage/tokudb/PerconaFT/ft/CMakeFiles/generate_log_code.dir/clean
 
 storage/tokudb/PerconaFT/ft/CMakeFiles/generate_log_code.dir/depend:
-	cd /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/ft /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/ft /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/ft/CMakeFiles/generate_log_code.dir/DependInfo.cmake --color=$(COLOR)
+	cd /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/ft /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/ft /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/ft/CMakeFiles/generate_log_code.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : storage/tokudb/PerconaFT/ft/CMakeFiles/generate_log_code.dir/depend
 
