@@ -1,4 +1,4 @@
-# Install script for directory: /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/ft/tests
+# Install script for directory: /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/ft/tests
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

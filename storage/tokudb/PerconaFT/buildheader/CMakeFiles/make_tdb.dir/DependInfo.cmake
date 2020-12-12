@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/buildheader/make_tdb.cc" "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/buildheader/CMakeFiles/make_tdb.dir/make_tdb.cc.o"
+  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/buildheader/make_tdb.cc" "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/buildheader/CMakeFiles/make_tdb.dir/make_tdb.cc.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -13,7 +13,7 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
   "HAVE_CONFIG_H"
   "LZ4_DISABLE_DEPRECATE_WARNINGS"
   "MYSQL_TOKUDB_ENGINE=1"
-  "MYSQL_VERSION_ID=80021"
+  "MYSQL_VERSION_ID=80022"
   "RAPIDJSON_NO_SIZETYPEDEFINE"
   "RAPIDJSON_SCHEMA_USE_INTERNALREGEX=0"
   "RAPIDJSON_SCHEMA_USE_STDREGEX=1"

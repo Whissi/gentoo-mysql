@@ -6,10 +6,7 @@
 package org.rocksdb;
 
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Options to control the behavior of a database.  It will be used
@@ -25,6 +22,25 @@ public class Options extends RocksObject
     MutableColumnFamilyOptionsInterface<Options> {
   static {
     RocksDB.loadLibrary();
+  }
+
+  /**
+   * Converts the input properties into a Options-style formatted string
+   * @param properties   The set of properties to convert
+   * @return The Options-style representation of those properties.
+   */
+  public static String getOptionStringFromProps(final Properties properties) {
+    if (properties == null || properties.size() == 0) {
+      throw new IllegalArgumentException("Properties value must contain at least one value.");
+    }
+    StringBuilder stringBuilder = new StringBuilder();
+    for (final String name : properties.stringPropertyNames()) {
+      stringBuilder.append(name);
+      stringBuilder.append("=");
+      stringBuilder.append(properties.getProperty(name));
+      stringBuilder.append(";");
+    }
+    return stringBuilder.toString();
   }
 
   /**
@@ -75,6 +91,7 @@ public class Options extends RocksObject
     this.compressionOptions_ = other.compressionOptions_;
     this.rowCache_ = other.rowCache_;
     this.writeBufferManager_ = other.writeBufferManager_;
+    this.compactionThreadLimiter_ = other.compactionThreadLimiter_;
   }
 
   @Override
@@ -1792,6 +1809,31 @@ public class Options extends RocksObject
     return atomicFlush(nativeHandle_);
   }
 
+  @Override
+  public Options setSstPartitionerFactory(SstPartitionerFactory sstPartitionerFactory) {
+    setSstPartitionerFactory(nativeHandle_, sstPartitionerFactory.nativeHandle_);
+    this.sstPartitionerFactory_ = sstPartitionerFactory;
+    return this;
+  }
+
+  @Override
+  public SstPartitionerFactory sstPartitionerFactory() {
+    return sstPartitionerFactory_;
+  }
+
+  @Override
+  public Options setCompactionThreadLimiter(final ConcurrentTaskLimiter compactionThreadLimiter) {
+    setCompactionThreadLimiter(nativeHandle_, compactionThreadLimiter.nativeHandle_);
+    this.compactionThreadLimiter_ = compactionThreadLimiter;
+    return this;
+  }
+
+  @Override
+  public ConcurrentTaskLimiter compactionThreadLimiter() {
+    assert (isOwningHandle());
+    return this.compactionThreadLimiter_;
+  }
+
   private native static long newOptions();
   private native static long newOptions(long dbOptHandle,
       long cfOptHandle);
@@ -2162,6 +2204,9 @@ public class Options extends RocksObject
   private native void setAtomicFlush(final long handle,
       final boolean atomicFlush);
   private native boolean atomicFlush(final long handle);
+  private native void setSstPartitionerFactory(long nativeHandle_, long newFactoryHandle);
+  private static native void setCompactionThreadLimiter(
+      final long nativeHandle_, final long newLimiterHandle);
 
   // instance variables
   // NOTE: If you add new member variables, please update the copy constructor above!
@@ -2180,4 +2225,6 @@ public class Options extends RocksObject
   private Cache rowCache_;
   private WalFilter walFilter_;
   private WriteBufferManager writeBufferManager_;
+  private SstPartitionerFactory sstPartitionerFactory_;
+  private ConcurrentTaskLimiter compactionThreadLimiter_;
 }

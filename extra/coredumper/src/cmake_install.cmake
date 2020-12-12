@@ -1,4 +1,4 @@
-# Install script for directory: /mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/extra/coredumper/src
+# Install script for directory: /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/extra/coredumper/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -43,18 +43,18 @@ if(NOT DEFINED CMAKE_OBJDUMP)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/extra/coredumper/src/libcoredumper.a")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/extra/coredumper/src/libcoredumper.a")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/coredumper" TYPE FILE FILES "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/extra/coredumper/src/../include/coredumper/coredumper.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/coredumper" TYPE FILE FILES "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/extra/coredumper/src/../include/coredumper/coredumper.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/cmake/coredumper.cmake")
     file(DIFFERENT EXPORT_FILE_CHANGED FILES
          "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/cmake/coredumper.cmake"
-         "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/extra/coredumper/src/CMakeFiles/Export/cmake/coredumper.cmake")
+         "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/extra/coredumper/src/CMakeFiles/Export/cmake/coredumper.cmake")
     if(EXPORT_FILE_CHANGED)
       file(GLOB OLD_CONFIG_FILES "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/cmake/coredumper-*.cmake")
       if(OLD_CONFIG_FILES)
@@ -63,9 +63,9 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
       endif()
     endif()
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/cmake" TYPE FILE FILES "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/extra/coredumper/src/CMakeFiles/Export/cmake/coredumper.cmake")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/cmake" TYPE FILE FILES "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/extra/coredumper/src/CMakeFiles/Export/cmake/coredumper.cmake")
   if("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Rr][Ee][Ll][Ww][Ii][Tt][Hh][Dd][Ee][Bb][Ii][Nn][Ff][Oo])$")
-    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/cmake" TYPE FILE FILES "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/extra/coredumper/src/CMakeFiles/Export/cmake/coredumper-relwithdebinfo.cmake")
+    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/cmake" TYPE FILE FILES "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/extra/coredumper/src/CMakeFiles/Export/cmake/coredumper-relwithdebinfo.cmake")
   endif()
 endif()
 

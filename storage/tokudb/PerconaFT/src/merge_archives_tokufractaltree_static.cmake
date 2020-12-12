@@ -17,7 +17,7 @@
 # This script merges many static libraries into
 # one big library on Unix.
 SET(TARGET "tokufractaltree_static")
-SET(CMAKE_CURRENT_BINARY_DIR "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/storage/tokudb/PerconaFT/src")
+SET(CMAKE_CURRENT_BINARY_DIR "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src")
 SET(CMAKE_AR "/usr/bin/gcc-ar")
 SET(CMAKE_RANLIB "/usr/bin/gcc-ranlib")
 

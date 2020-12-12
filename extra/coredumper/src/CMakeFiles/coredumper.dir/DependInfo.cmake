@@ -5,8 +5,8 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/extra/coredumper/src/coredumper.c" "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/extra/coredumper/src/CMakeFiles/coredumper.dir/coredumper.c.o"
-  "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/extra/coredumper/src/thread_lister.c" "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/extra/coredumper/src/CMakeFiles/coredumper.dir/thread_lister.c.o"
+  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/extra/coredumper/src/coredumper.c" "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/extra/coredumper/src/CMakeFiles/coredumper.dir/coredumper.c.o"
+  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/extra/coredumper/src/thread_lister.c" "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/extra/coredumper/src/CMakeFiles/coredumper.dir/thread_lister.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 
@@ -33,10 +33,11 @@ set(CMAKE_C_TARGET_INCLUDE_PATH
   "extra/rapidjson/include"
   "extra/lz4"
   "extra/zstd/lib"
+  "extra/zlib"
   )
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/extra/coredumper/src/elfcore.cc" "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/extra/coredumper/src/CMakeFiles/coredumper.dir/elfcore.cc.o"
-  "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/extra/coredumper/src/linuxthreads.cc" "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/extra/coredumper/src/CMakeFiles/coredumper.dir/linuxthreads.cc.o"
+  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/extra/coredumper/src/elfcore.cc" "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/extra/coredumper/src/CMakeFiles/coredumper.dir/elfcore.cc.o"
+  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/extra/coredumper/src/linuxthreads.cc" "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/extra/coredumper/src/CMakeFiles/coredumper.dir/linuxthreads.cc.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -63,6 +64,7 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "extra/rapidjson/include"
   "extra/lz4"
   "extra/zstd/lib"
+  "extra/zlib"
   )
 
 # Targets to which this target links.

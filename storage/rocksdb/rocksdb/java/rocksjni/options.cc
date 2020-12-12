@@ -6,9 +6,12 @@
 // This file implements the "bridge" between Java and C++ for
 // ROCKSDB_NAMESPACE::Options.
 
+#include "rocksdb/options.h"
+
 #include <jni.h>
 #include <stdio.h>
 #include <stdlib.h>
+
 #include <memory>
 #include <vector>
 
@@ -19,22 +22,20 @@
 #include "include/org_rocksdb_Options.h"
 #include "include/org_rocksdb_ReadOptions.h"
 #include "include/org_rocksdb_WriteOptions.h"
-
-#include "rocksjni/comparatorjnicallback.h"
-#include "rocksjni/portal.h"
-#include "rocksjni/statisticsjni.h"
-#include "rocksjni/table_filter_jnicallback.h"
-
 #include "rocksdb/comparator.h"
 #include "rocksdb/convenience.h"
 #include "rocksdb/db.h"
 #include "rocksdb/memtablerep.h"
 #include "rocksdb/merge_operator.h"
-#include "rocksdb/options.h"
 #include "rocksdb/rate_limiter.h"
 #include "rocksdb/slice_transform.h"
+#include "rocksdb/sst_partitioner.h"
 #include "rocksdb/statistics.h"
 #include "rocksdb/table.h"
+#include "rocksjni/comparatorjnicallback.h"
+#include "rocksjni/portal.h"
+#include "rocksjni/statisticsjni.h"
+#include "rocksjni/table_filter_jnicallback.h"
 #include "utilities/merge_operators.h"
 
 /*
@@ -1128,6 +1129,34 @@ void Java_org_rocksdb_Options_setTableFactory(
   auto* table_factory =
       reinterpret_cast<ROCKSDB_NAMESPACE::TableFactory*>(jtable_factory_handle);
   options->table_factory.reset(table_factory);
+}
+
+/*
+ * Method:    setSstPartitionerFactory
+ * Signature: (JJ)V
+ */
+void Java_org_rocksdb_Options_setSstPartitionerFactory(JNIEnv*, jobject,
+                                                       jlong jhandle,
+                                                       jlong factory_handle) {
+  auto* options = reinterpret_cast<ROCKSDB_NAMESPACE::Options*>(jhandle);
+  auto factory = reinterpret_cast<
+      std::shared_ptr<ROCKSDB_NAMESPACE::SstPartitionerFactory>*>(
+      factory_handle);
+  options->sst_partitioner_factory = *factory;
+}
+
+/*
+ * Class:     org_rocksdb_Options
+ * Method:    setCompactionThreadLimiter
+ * Signature: (JJ)V
+ */
+void Java_org_rocksdb_Options_setCompactionThreadLimiter(
+    JNIEnv*, jclass, jlong jhandle, jlong jlimiter_handle) {
+  auto* options = reinterpret_cast<ROCKSDB_NAMESPACE::Options*>(jhandle);
+  auto* limiter = reinterpret_cast<
+      std::shared_ptr<ROCKSDB_NAMESPACE::ConcurrentTaskLimiter>*>(
+      jlimiter_handle);
+  options->compaction_thread_limiter = *limiter;
 }
 
 /*
@@ -3277,9 +3306,43 @@ jlong Java_org_rocksdb_ColumnFamilyOptions_newColumnFamilyOptionsFromOptions(
 /*
  * Class:     org_rocksdb_ColumnFamilyOptions
  * Method:    getColumnFamilyOptionsFromProps
+ * Signature: (JLjava/lang/String;)J
+ */
+jlong Java_org_rocksdb_ColumnFamilyOptions_getColumnFamilyOptionsFromProps__JLjava_lang_String_2(
+    JNIEnv* env, jclass, jlong cfg_handle, jstring jopt_string) {
+  const char* opt_string = env->GetStringUTFChars(jopt_string, nullptr);
+  if (opt_string == nullptr) {
+    // exception thrown: OutOfMemoryError
+    return 0;
+  }
+  auto* config_options =
+      reinterpret_cast<ROCKSDB_NAMESPACE::ConfigOptions*>(cfg_handle);
+  auto* cf_options = new ROCKSDB_NAMESPACE::ColumnFamilyOptions();
+  ROCKSDB_NAMESPACE::Status status =
+      ROCKSDB_NAMESPACE::GetColumnFamilyOptionsFromString(
+          *config_options, ROCKSDB_NAMESPACE::ColumnFamilyOptions(), opt_string,
+          cf_options);
+
+  env->ReleaseStringUTFChars(jopt_string, opt_string);
+
+  // Check if ColumnFamilyOptions creation was possible.
+  jlong ret_value = 0;
+  if (status.ok()) {
+    ret_value = reinterpret_cast<jlong>(cf_options);
+  } else {
+    // if operation failed the ColumnFamilyOptions need to be deleted
+    // again to prevent a memory leak.
+    delete cf_options;
+  }
+  return ret_value;
+}
+
+/*
+ * Class:     org_rocksdb_ColumnFamilyOptions
+ * Method:    getColumnFamilyOptionsFromProps
  * Signature: (Ljava/util/String;)J
  */
-jlong Java_org_rocksdb_ColumnFamilyOptions_getColumnFamilyOptionsFromProps(
+jlong Java_org_rocksdb_ColumnFamilyOptions_getColumnFamilyOptionsFromProps__Ljava_lang_String_2(
     JNIEnv* env, jclass, jstring jopt_string) {
   const char* opt_string = env->GetStringUTFChars(jopt_string, nullptr);
   if (opt_string == nullptr) {
@@ -3585,6 +3648,34 @@ void Java_org_rocksdb_ColumnFamilyOptions_setTableFactory(
   reinterpret_cast<ROCKSDB_NAMESPACE::ColumnFamilyOptions*>(jhandle)
       ->table_factory.reset(
           reinterpret_cast<ROCKSDB_NAMESPACE::TableFactory*>(jfactory_handle));
+}
+
+/*
+ * Method:    setSstPartitionerFactory
+ * Signature: (JJ)V
+ */
+void Java_org_rocksdb_ColumnFamilyOptions_setSstPartitionerFactory(
+    JNIEnv*, jobject, jlong jhandle, jlong factory_handle) {
+  auto* options =
+      reinterpret_cast<ROCKSDB_NAMESPACE::ColumnFamilyOptions*>(jhandle);
+  auto* factory = reinterpret_cast<ROCKSDB_NAMESPACE::SstPartitionerFactory*>(
+      factory_handle);
+  options->sst_partitioner_factory.reset(factory);
+}
+
+/*
+ * Class:     org_rocksdb_ColumnFamilyOptions
+ * Method:    setCompactionThreadLimiter
+ * Signature: (JJ)V
+ */
+void Java_org_rocksdb_ColumnFamilyOptions_setCompactionThreadLimiter(
+    JNIEnv*, jclass, jlong jhandle, jlong jlimiter_handle) {
+  auto* options =
+      reinterpret_cast<ROCKSDB_NAMESPACE::ColumnFamilyOptions*>(jhandle);
+  auto* limiter = reinterpret_cast<
+      std::shared_ptr<ROCKSDB_NAMESPACE::ConcurrentTaskLimiter>*>(
+      jlimiter_handle);
+  options->compaction_thread_limiter = *limiter;
 }
 
 /*
@@ -4670,9 +4761,42 @@ jlong Java_org_rocksdb_DBOptions_newDBOptionsFromOptions(
 /*
  * Class:     org_rocksdb_DBOptions
  * Method:    getDBOptionsFromProps
+ * Signature: (JLjava/lang/String;)J
+ */
+jlong Java_org_rocksdb_DBOptions_getDBOptionsFromProps__JLjava_lang_String_2(
+    JNIEnv* env, jclass, jlong config_handle, jstring jopt_string) {
+  const char* opt_string = env->GetStringUTFChars(jopt_string, nullptr);
+  if (opt_string == nullptr) {
+    // exception thrown: OutOfMemoryError
+    return 0;
+  }
+
+  auto* config_options =
+      reinterpret_cast<ROCKSDB_NAMESPACE::ConfigOptions*>(config_handle);
+  auto* db_options = new ROCKSDB_NAMESPACE::DBOptions();
+  ROCKSDB_NAMESPACE::Status status = ROCKSDB_NAMESPACE::GetDBOptionsFromString(
+      *config_options, ROCKSDB_NAMESPACE::DBOptions(), opt_string, db_options);
+
+  env->ReleaseStringUTFChars(jopt_string, opt_string);
+
+  // Check if DBOptions creation was possible.
+  jlong ret_value = 0;
+  if (status.ok()) {
+    ret_value = reinterpret_cast<jlong>(db_options);
+  } else {
+    // if operation failed the DBOptions need to be deleted
+    // again to prevent a memory leak.
+    delete db_options;
+  }
+  return ret_value;
+}
+
+/*
+ * Class:     org_rocksdb_DBOptions
+ * Method:    getDBOptionsFromProps
  * Signature: (Ljava/util/String;)J
  */
-jlong Java_org_rocksdb_DBOptions_getDBOptionsFromProps(
+jlong Java_org_rocksdb_DBOptions_getDBOptionsFromProps__Ljava_lang_String_2(
     JNIEnv* env, jclass, jstring jopt_string) {
   const char* opt_string = env->GetStringUTFChars(jopt_string, nullptr);
   if (opt_string == nullptr) {

@@ -46,7 +46,7 @@ add_library(coredumper STATIC IMPORTED)
 
 set_target_properties(coredumper PROPERTIES
   INTERFACE_COMPILE_OPTIONS "-fno-strict-aliasing"
-  INTERFACE_INCLUDE_DIRECTORIES "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/extra/coredumper/include/"
+  INTERFACE_INCLUDE_DIRECTORIES "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/extra/coredumper/include/"
 )
 
 # Import target "coredumper" for configuration "RelWithDebInfo"
@@ -54,7 +54,7 @@ set_property(TARGET coredumper APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDE
 set_target_properties(coredumper PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "C;CXX"
   IMPORTED_LINK_INTERFACE_LIBRARIES_RELWITHDEBINFO "-lpthread;-pthread"
-  IMPORTED_LOCATION_RELWITHDEBINFO "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/extra/coredumper/src/libcoredumper.a"
+  IMPORTED_LOCATION_RELWITHDEBINFO "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/extra/coredumper/src/libcoredumper.a"
   )
 
 # This file does not depend on other imported targets which have

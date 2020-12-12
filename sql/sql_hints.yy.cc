@@ -70,14 +70,26 @@
 /* Copy the first part of user declarations.  */
 #line 28 "sql_hints.yy" /* yacc.c:339  */
 
-#include "my_inttypes.h"
+#include <climits>
+#include <cstdlib>
+
+#include "lex_string.h"
+#include "m_string.h"
+#include "my_dbug.h"
+#include "my_inttypes.h"  // TODO: replace with cstdint
+#include "mysqld_error.h"
 #include "sql/derror.h"
+#include "sql/item.h"
 #include "sql/item_subselect.h"
+#include "sql/lexer_yystype.h"
+#include "sql/opt_hints.h"
 #include "sql/parse_tree_helpers.h"  // check_resource_group_name_len
 #include "sql/parse_tree_hints.h"
 #include "sql/parser_yystype.h"
 #include "sql/sql_class.h"
 #include "sql/sql_const.h"
+#include "sql/sql_error.h"
+#include "sql/sql_hints.yy.h"
 #include "sql/sql_lex_hints.h"
 
 #define NEW_PTN new (thd->mem_root)
@@ -91,7 +103,7 @@ static bool parse_int(longlong *to, const char *from, size_t from_length)
 }
 
 
-#line 95 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:339  */
+#line 107 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -111,8 +123,8 @@ static bool parse_int(longlong *to, const char *from, size_t from_length)
 
 /* In a future release of Bison, this section will be replaced
    by #include "sql_hints.yy.h".  */
-#ifndef YY_HINT_PARSER_MNT_WORKSPACE_PERCONA_SERVER_8_0_SOURCE_TARBALLS_CVE_TEST_PERCONA_SERVER_SQL_SQL_HINTS_YY_H_INCLUDED
-# define YY_HINT_PARSER_MNT_WORKSPACE_PERCONA_SERVER_8_0_SOURCE_TARBALLS_CVE_TEST_PERCONA_SERVER_SQL_SQL_HINTS_YY_H_INCLUDED
+#ifndef YY_HINT_PARSER_MNT_WORKSPACE_PERCONA_SERVER_8_0_SOURCE_TARBALLS_TEST_PERCONA_SERVER_SQL_SQL_HINTS_YY_H_INCLUDED
+# define YY_HINT_PARSER_MNT_WORKSPACE_PERCONA_SERVER_8_0_SOURCE_TARBALLS_TEST_PERCONA_SERVER_SQL_SQL_HINTS_YY_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -173,6 +185,9 @@ extern int HINT_PARSER_debug;
     NO_GROUP_INDEX_HINT = 1044,
     ORDER_INDEX_HINT = 1045,
     NO_ORDER_INDEX_HINT = 1046,
+    DERIVED_CONDITION_PUSHDOWN_HINT = 1047,
+    NO_DERIVED_CONDITION_PUSHDOWN_HINT = 1048,
+    HINT_ARG_FLOATING_POINT_NUMBER = 1049,
     YYUNDEF = 1150
   };
 #endif
@@ -224,6 +239,9 @@ extern int HINT_PARSER_debug;
 #define NO_GROUP_INDEX_HINT 1044
 #define ORDER_INDEX_HINT 1045
 #define NO_ORDER_INDEX_HINT 1046
+#define DERIVED_CONDITION_PUSHDOWN_HINT 1047
+#define NO_DERIVED_CONDITION_PUSHDOWN_HINT 1048
+#define HINT_ARG_FLOATING_POINT_NUMBER 1049
 #define YYUNDEF 1150
 
 /* Value type.  */
@@ -232,11 +250,11 @@ extern int HINT_PARSER_debug;
 
 int HINT_PARSER_parse (class THD *thd, class Hint_scanner *scanner, class PT_hint_list **ret);
 
-#endif /* !YY_HINT_PARSER_MNT_WORKSPACE_PERCONA_SERVER_8_0_SOURCE_TARBALLS_CVE_TEST_PERCONA_SERVER_SQL_SQL_HINTS_YY_H_INCLUDED  */
+#endif /* !YY_HINT_PARSER_MNT_WORKSPACE_PERCONA_SERVER_8_0_SOURCE_TARBALLS_TEST_PERCONA_SERVER_SQL_SQL_HINTS_YY_H_INCLUDED  */
 
 /* Copy the second part of user declarations.  */
 
-#line 240 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:358  */
+#line 258 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -476,18 +494,18 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  63
+#define YYFINAL  65
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   195
+#define YYLAST   202
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  55
+#define YYNTOKENS  58
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  34
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  94
+#define YYNRULES  97
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  162
+#define YYNSTATES  165
 
 /* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
    by yylex, with out-of-bounds checking.  */
@@ -505,9 +523,9 @@ static const yytype_uint8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-      51,    52,     2,     2,    53,     2,     2,     2,     2,     2,
+      54,    55,     2,     2,    56,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,    54,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,    57,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -605,7 +623,7 @@ static const yytype_uint8 yytranslate[] =
       13,    14,    15,    16,    17,    18,    19,    20,    21,    22,
       23,    24,    25,    26,    27,    28,    29,    30,    31,    32,
       33,    34,    35,    36,    37,    38,    39,    40,    41,    42,
-      43,    44,    45,    46,    47,    48,    49,     2,     2,     2,
+      43,    44,    45,    46,    47,    48,    49,    50,    51,    52,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -616,23 +634,23 @@ static const yytype_uint8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-      50,     2
+      53,     2
 };
 
 #if YYDEBUG
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   188,   188,   190,   192,   197,   203,   211,   212,   213,
-     214,   215,   216,   217,   222,   242,   243,   247,   253,   262,
-     263,   267,   273,   282,   283,   287,   293,   302,   306,   314,
-     322,   323,   331,   332,   336,   343,   350,   357,   364,   371,
-     378,   385,   392,   399,   408,   409,   413,   420,   421,   422,
-     423,   427,   429,   434,   440,   447,   453,   463,   470,   480,
-     484,   488,   492,   499,   503,   507,   511,   518,   522,   526,
-     530,   534,   538,   542,   546,   553,   557,   561,   565,   569,
-     573,   577,   581,   588,   597,   606,   618,   619,   623,   638,
-     673,   674,   678,   686,   687
+       0,   204,   204,   206,   208,   213,   219,   227,   228,   229,
+     230,   231,   232,   233,   238,   258,   259,   263,   269,   278,
+     279,   283,   289,   298,   299,   303,   309,   318,   322,   330,
+     338,   339,   347,   348,   352,   359,   366,   373,   380,   387,
+     394,   401,   408,   415,   424,   425,   429,   436,   437,   438,
+     439,   443,   445,   450,   456,   463,   469,   479,   486,   496,
+     500,   504,   508,   512,   519,   523,   527,   531,   535,   542,
+     546,   550,   554,   558,   562,   566,   570,   577,   581,   585,
+     589,   593,   597,   601,   605,   612,   621,   630,   642,   643,
+     647,   662,   666,   701,   702,   706,   714,   715
 };
 #endif
 
@@ -656,19 +674,20 @@ static const char *const yytname[] =
   "HINT_CLOSE", "HINT_ERROR", "INDEX_HINT", "NO_INDEX_HINT",
   "JOIN_INDEX_HINT", "NO_JOIN_INDEX_HINT", "GROUP_INDEX_HINT",
   "NO_GROUP_INDEX_HINT", "ORDER_INDEX_HINT", "NO_ORDER_INDEX_HINT",
-  "YYUNDEF", "'('", "')'", "','", "'='", "$accept", "start", "hint_list",
-  "hint", "max_execution_time_hint", "opt_hint_param_table_list",
-  "hint_param_table_list", "opt_hint_param_table_list_empty_qb",
-  "hint_param_table_list_empty_qb", "opt_hint_param_index_list",
-  "hint_param_index_list", "hint_param_index", "hint_param_table_empty_qb",
-  "hint_param_table", "hint_param_table_ext", "opt_qb_name",
-  "qb_level_hint", "semijoin_strategies", "semijoin_strategy",
-  "subquery_strategy", "table_level_hint", "index_level_hint",
-  "table_level_hint_type_on", "table_level_hint_type_off",
-  "key_level_hint_type_on", "key_level_hint_type_off", "qb_name_hint",
-  "set_var_hint", "resource_group_hint", "set_var_ident",
-  "set_var_num_item", "set_var_text_value", "set_var_string_item",
-  "set_var_arg", YY_NULLPTR
+  "DERIVED_CONDITION_PUSHDOWN_HINT", "NO_DERIVED_CONDITION_PUSHDOWN_HINT",
+  "HINT_ARG_FLOATING_POINT_NUMBER", "YYUNDEF", "'('", "')'", "','", "'='",
+  "$accept", "start", "hint_list", "hint", "max_execution_time_hint",
+  "opt_hint_param_table_list", "hint_param_table_list",
+  "opt_hint_param_table_list_empty_qb", "hint_param_table_list_empty_qb",
+  "opt_hint_param_index_list", "hint_param_index_list", "hint_param_index",
+  "hint_param_table_empty_qb", "hint_param_table", "hint_param_table_ext",
+  "opt_qb_name", "qb_level_hint", "semijoin_strategies",
+  "semijoin_strategy", "subquery_strategy", "table_level_hint",
+  "index_level_hint", "table_level_hint_type_on",
+  "table_level_hint_type_off", "key_level_hint_type_on",
+  "key_level_hint_type_off", "qb_name_hint", "set_var_hint",
+  "resource_group_hint", "set_var_ident", "set_var_num_item",
+  "set_var_text_value", "set_var_string_item", "set_var_arg", YY_NULLPTR
 };
 #endif
 
@@ -682,14 +701,14 @@ static const yytype_uint16 yytoknum[] =
     1017,  1018,  1019,  1020,  1021,  1022,  1023,  1024,  1025,  1026,
     1027,  1028,  1029,  1030,  1031,  1032,  1033,  1034,  1035,  1036,
     1037,  1038,  1039,  1040,  1041,  1042,  1043,  1044,  1045,  1046,
-    1150,    40,    41,    44,    61
+    1047,  1048,  1049,  1150,    40,    41,    44,    61
 };
 # endif
 
-#define YYPACT_NINF -77
+#define YYPACT_NINF -65
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-77)))
+  (!!((Yystate) == (-65)))
 
 #define YYTABLE_NINF -1
 
@@ -700,23 +719,23 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      58,   -36,   -43,   -34,   -77,   -77,   -77,   -77,   -77,   -77,
-     -77,    -3,   -77,    16,    46,    48,   -77,   -77,    63,    75,
-      77,    78,   -77,   -77,    79,   -77,   -77,   -77,   -77,   -77,
-     -77,   -77,   -77,   -77,   -77,   -77,   -77,    60,     9,   -77,
-     -77,   -77,   -77,   -77,    80,    81,    83,    85,   -77,   -77,
-     -77,   -77,    11,    91,    96,    99,    96,    96,   -17,    59,
-      74,    96,     8,   -77,    97,   -77,   -77,    76,    82,    84,
-      84,    86,    87,   -77,    -5,    88,    -5,    36,    96,   105,
-      90,    92,   -77,   105,    94,   105,    95,    98,   -77,   -77,
-      89,   -77,   105,   100,   105,   101,   108,   -77,   112,   112,
-     -77,   -77,   -77,   -77,   -77,   -77,    70,   -77,   -77,    72,
-     -77,   -77,   102,   -77,   -77,   103,   104,   -77,   -77,   113,
-     106,   -77,   107,   -77,   -77,    30,   109,   -77,   110,   -77,
-     -77,   -77,   111,   114,   -77,   116,   -77,    -5,   -77,   -77,
-     -77,   105,   -77,   -77,   -77,   -77,   -77,   -77,   -77,   -77,
-     -77,   -77,   117,   -77,   -77,   -77,   112,   -77,   -77,   -77,
-     -77,   -77
+      50,   -34,   -18,   -16,   -65,   -65,   -65,   -65,   -65,   -65,
+     -65,   -14,   -65,    35,    37,    54,   -65,   -65,    56,    58,
+      63,    71,   -65,   -65,    80,   -65,   -65,   -65,   -65,   -65,
+     -65,   -65,   -65,   -65,   -65,   -65,   -65,   -65,   -65,   104,
+      -1,   -65,   -65,   -65,   -65,   -65,    81,    82,    83,    84,
+     -65,   -65,   -65,   -65,    17,   103,   105,   107,   105,   105,
+     -27,    22,    51,   105,    -2,   -65,   100,   -65,   -65,    79,
+      92,    94,    94,    86,    89,   -65,   116,    90,   116,    26,
+     105,   110,    93,    91,   -65,   110,    95,   110,    96,    97,
+     -65,   -65,    98,   -65,   110,    99,   110,   101,   113,   -65,
+     117,   117,   -65,   -65,   -65,   -65,   -65,   -65,     5,   -65,
+     -65,    77,   -65,   -65,   102,   -65,   -65,   106,   108,   -65,
+     -65,   122,   111,   -65,   112,   -65,   -65,    67,   114,   -65,
+     115,   -65,   -65,   -65,   118,   109,   -65,   119,   -65,   116,
+     -65,   -65,   -65,   110,   -65,   -65,   -65,   -65,   -65,   -65,
+     -65,   -65,   -65,   -65,   -65,   120,   -65,   -65,   -65,   117,
+     -65,   -65,   -65,   -65,   -65
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -724,41 +743,41 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       0,     0,     0,     0,    59,    60,    63,    64,    75,    76,
-      68,     0,    67,     0,     0,     0,    62,    66,     0,     0,
-       0,     0,    69,    77,     0,    70,    78,    61,    65,    71,
-      79,    72,    80,    73,    81,    74,    82,     0,     0,     5,
-      11,     9,     8,     7,     0,     0,     0,     0,    10,    12,
-      13,     4,     0,     0,    32,     0,    32,    32,    15,    15,
-      15,    32,     0,     1,     0,     2,     6,    15,    15,     0,
-       0,     0,     0,    33,    44,     0,    44,     0,    32,    19,
-       0,    16,    17,    19,     0,    19,     0,     0,    87,    86,
-       0,     3,    19,     0,    19,     0,     0,    30,    23,    23,
-      14,    85,    50,    47,    48,    49,     0,    45,    83,     0,
-      52,    51,     0,    29,    28,     0,    20,    21,    37,     0,
-       0,    39,     0,    41,    43,     0,     0,    53,     0,    55,
-      31,    27,     0,    24,    25,     0,    35,     0,    34,    36,
-      38,     0,    18,    40,    42,    88,    90,    91,    89,    94,
-      92,    93,     0,    54,    56,    57,     0,    58,    46,    22,
-      84,    26
+       0,     0,     0,     0,    59,    60,    64,    65,    77,    78,
+      70,     0,    69,     0,     0,     0,    62,    67,     0,     0,
+       0,     0,    71,    79,     0,    72,    80,    61,    66,    73,
+      81,    74,    82,    75,    83,    76,    84,    63,    68,     0,
+       0,     5,    11,     9,     8,     7,     0,     0,     0,     0,
+      10,    12,    13,     4,     0,     0,    32,     0,    32,    32,
+      15,    15,    15,    32,     0,     1,     0,     2,     6,    15,
+      15,     0,     0,     0,     0,    33,    44,     0,    44,     0,
+      32,    19,     0,    16,    17,    19,     0,    19,     0,     0,
+      89,    88,     0,     3,    19,     0,    19,     0,     0,    30,
+      23,    23,    14,    87,    50,    47,    48,    49,     0,    45,
+      85,     0,    52,    51,     0,    29,    28,     0,    20,    21,
+      37,     0,     0,    39,     0,    41,    43,     0,     0,    53,
+       0,    55,    31,    27,     0,    24,    25,     0,    35,     0,
+      34,    36,    38,     0,    18,    40,    42,    90,    93,    94,
+      92,    91,    97,    95,    96,     0,    54,    56,    57,     0,
+      58,    46,    22,    86,    26
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -77,   -77,   -77,   118,   -77,    49,   -77,   -76,   -77,    52,
-     -77,     4,    23,   -69,   115,    37,   -77,   119,    28,   -77,
-     -77,   -77,   -77,   -77,   -77,   -77,   -77,   -77,   -77,   -77,
-     -77,   -77,   -77,   -77
+     -65,   -65,   -65,   123,   -65,    52,   -65,    24,   -65,    59,
+     -65,     0,    19,   -64,   121,    27,   -65,   124,    29,   -65,
+     -65,   -65,   -65,   -65,   -65,   -65,   -65,   -65,   -65,   -65,
+     -65,   -65,   -65,   -65
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int16 yydefgoto[] =
 {
-      -1,    37,    38,    39,    40,    80,    81,   115,   116,   132,
-     133,   134,   117,    82,    98,    74,    41,   106,   107,   112,
-      42,    43,    44,    45,    46,    47,    48,    49,    50,    90,
-     149,   150,   151,   152
+      -1,    39,    40,    41,    42,    82,    83,   117,   118,   134,
+     135,   136,   119,    84,   100,    76,    43,   108,   109,   114,
+      44,    45,    46,    47,    48,    49,    50,    51,    52,    92,
+     152,   153,   154,   155
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -766,50 +785,52 @@ static const yytype_int16 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_uint8 yytable[] =
 {
-      97,    97,   102,   103,    51,   104,   105,   120,    52,   122,
-      64,    88,     2,     3,     4,     5,   126,    53,   128,    78,
-      79,     6,     7,     8,     9,    10,    11,    12,    13,    14,
+      66,    90,     2,     3,     4,     5,    53,    99,    99,    80,
+      81,     6,     7,     8,     9,    10,    11,    12,    13,    14,
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
-      25,    26,    27,    28,    89,   110,    71,   111,    54,    65,
-     142,    29,    30,    31,    32,    33,    34,    35,    36,     1,
-      63,     2,     3,     4,     5,   145,   146,    55,   147,   148,
-       6,     7,     8,     9,    10,    11,    12,    13,    14,    15,
-      16,    17,    18,    19,    20,    21,    22,    23,    24,    25,
-      26,    27,    28,    76,    77,    78,    83,    56,    87,    57,
-      29,    30,    31,    32,    33,    34,    35,    36,    84,    86,
-      78,    85,    78,    92,    58,   113,    93,    95,    78,    94,
-      78,    96,   136,   137,   138,   137,    59,    72,    60,    61,
-      62,    67,    68,    73,    69,    75,    70,    91,   100,   101,
-     108,   114,   118,   125,   130,   119,   121,   123,   131,    78,
-     124,   135,   127,   129,   139,   140,    66,   141,   143,   144,
-     161,   153,   154,   155,   159,   158,     0,   156,   157,   160,
+      25,    26,    27,    28,    91,   112,    54,   113,    55,    67,
+      56,    29,    30,    31,    32,    33,    34,    35,    36,    37,
+      38,     1,    73,     2,     3,     4,     5,   144,    80,    85,
+     138,   139,     6,     7,     8,     9,    10,    11,    12,    13,
+      14,    15,    16,    17,    18,    19,    20,    21,    22,    23,
+      24,    25,    26,    27,    28,    78,    79,    80,    87,    57,
+      89,    58,    29,    30,    31,    32,    33,    34,    35,    36,
+      37,    38,   147,   148,    65,   149,   150,   115,    59,   122,
+      60,   124,    61,    86,    88,    80,    94,    62,   128,   151,
+     130,    95,    97,   104,   105,    63,   106,   107,    80,    96,
+      80,    98,   140,   139,    64,    69,    70,    71,    72,    74,
+      93,   102,    75,    77,   103,   110,   116,   121,   120,   132,
+     123,   125,   126,   133,   129,   127,   131,   141,    80,   164,
+     137,   142,   162,    68,   143,   159,   145,   146,   161,   156,
+     157,     0,     0,   158,   160,   163,     0,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,    99,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,   109
+       0,     0,     0,   101,     0,     0,     0,     0,     0,     0,
+       0,     0,   111
 };
 
 static const yytype_int16 yycheck[] =
 {
-      69,    70,     7,     8,    40,    10,    11,    83,    51,    85,
-       1,     3,     3,     4,     5,     6,    92,    51,    94,    36,
+       1,     3,     3,     4,     5,     6,    40,    71,    72,    36,
       37,    12,    13,    14,    15,    16,    17,    18,    19,    20,
       21,    22,    23,    24,    25,    26,    27,    28,    29,    30,
-      31,    32,    33,    34,    36,     9,    35,    11,    51,    40,
-     119,    42,    43,    44,    45,    46,    47,    48,    49,     1,
-       0,     3,     4,     5,     6,    35,    36,    51,    38,    39,
-      12,    13,    14,    15,    16,    17,    18,    19,    20,    21,
-      22,    23,    24,    25,    26,    27,    28,    29,    30,    31,
-      32,    33,    34,    56,    57,    36,    37,    51,    61,    51,
-      42,    43,    44,    45,    46,    47,    48,    49,    59,    60,
-      36,    37,    36,    37,    51,    78,    67,    68,    36,    37,
-      36,    37,    52,    53,    52,    53,    51,    36,    51,    51,
-      51,    51,    51,    37,    51,    36,    51,    40,    52,    52,
-      52,    36,    52,    54,    36,    53,    52,    52,    36,    36,
-      52,    99,    52,    52,    52,    52,    38,    53,    52,    52,
-     156,    52,    52,    52,   141,   137,    -1,    53,    52,    52,
+      31,    32,    33,    34,    36,     9,    54,    11,    54,    40,
+      54,    42,    43,    44,    45,    46,    47,    48,    49,    50,
+      51,     1,    35,     3,     4,     5,     6,   121,    36,    37,
+      55,    56,    12,    13,    14,    15,    16,    17,    18,    19,
+      20,    21,    22,    23,    24,    25,    26,    27,    28,    29,
+      30,    31,    32,    33,    34,    58,    59,    36,    37,    54,
+      63,    54,    42,    43,    44,    45,    46,    47,    48,    49,
+      50,    51,    35,    36,     0,    38,    39,    80,    54,    85,
+      54,    87,    54,    61,    62,    36,    37,    54,    94,    52,
+      96,    69,    70,     7,     8,    54,    10,    11,    36,    37,
+      36,    37,    55,    56,    54,    54,    54,    54,    54,    36,
+      40,    55,    37,    36,    55,    55,    36,    56,    55,    36,
+      55,    55,    55,    36,    55,    57,    55,    55,    36,   159,
+     101,    55,   143,    40,    56,    56,    55,    55,   139,    55,
+      55,    -1,    -1,    55,    55,    55,    -1,    -1,    -1,    -1,
       -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
-      -1,    -1,    -1,    -1,    -1,    70,    -1,    -1,    -1,    -1,
-      -1,    -1,    -1,    -1,    -1,    76
+      -1,    -1,    -1,    72,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    78
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
@@ -819,35 +840,35 @@ static const yytype_uint8 yystos[] =
        0,     1,     3,     4,     5,     6,    12,    13,    14,    15,
       16,    17,    18,    19,    20,    21,    22,    23,    24,    25,
       26,    27,    28,    29,    30,    31,    32,    33,    34,    42,
-      43,    44,    45,    46,    47,    48,    49,    56,    57,    58,
-      59,    71,    75,    76,    77,    78,    79,    80,    81,    82,
-      83,    40,    51,    51,    51,    51,    51,    51,    51,    51,
-      51,    51,    51,     0,     1,    40,    58,    51,    51,    51,
-      51,    35,    36,    37,    70,    36,    70,    70,    36,    37,
-      60,    61,    68,    37,    60,    37,    60,    70,     3,    36,
-      84,    40,    37,    60,    37,    60,    37,    68,    69,    69,
-      52,    52,     7,     8,    10,    11,    72,    73,    52,    72,
-       9,    11,    74,    70,    36,    62,    63,    67,    52,    53,
-      62,    52,    62,    52,    52,    54,    62,    52,    62,    52,
-      36,    36,    64,    65,    66,    64,    52,    53,    52,    52,
-      52,    53,    68,    52,    52,    35,    36,    38,    39,    85,
-      86,    87,    88,    52,    52,    52,    53,    52,    73,    67,
-      52,    66
+      43,    44,    45,    46,    47,    48,    49,    50,    51,    59,
+      60,    61,    62,    74,    78,    79,    80,    81,    82,    83,
+      84,    85,    86,    40,    54,    54,    54,    54,    54,    54,
+      54,    54,    54,    54,    54,     0,     1,    40,    61,    54,
+      54,    54,    54,    35,    36,    37,    73,    36,    73,    73,
+      36,    37,    63,    64,    71,    37,    63,    37,    63,    73,
+       3,    36,    87,    40,    37,    63,    37,    63,    37,    71,
+      72,    72,    55,    55,     7,     8,    10,    11,    75,    76,
+      55,    75,     9,    11,    77,    73,    36,    65,    66,    70,
+      55,    56,    65,    55,    65,    55,    55,    57,    65,    55,
+      65,    55,    36,    36,    67,    68,    69,    67,    55,    56,
+      55,    55,    55,    56,    71,    55,    55,    35,    36,    38,
+      39,    52,    88,    89,    90,    91,    55,    55,    55,    56,
+      55,    76,    70,    55,    69
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,    55,    56,    56,    56,    57,    57,    58,    58,    58,
-      58,    58,    58,    58,    59,    60,    60,    61,    61,    62,
-      62,    63,    63,    64,    64,    65,    65,    66,    67,    68,
-      69,    69,    70,    70,    71,    71,    71,    71,    71,    71,
-      71,    71,    71,    71,    72,    72,    72,    73,    73,    73,
-      73,    74,    74,    75,    75,    75,    75,    76,    76,    77,
-      77,    77,    77,    78,    78,    78,    78,    79,    79,    79,
-      79,    79,    79,    79,    79,    80,    80,    80,    80,    80,
-      80,    80,    80,    81,    82,    83,    84,    84,    85,    85,
-      86,    86,    87,    88,    88
+       0,    58,    59,    59,    59,    60,    60,    61,    61,    61,
+      61,    61,    61,    61,    62,    63,    63,    64,    64,    65,
+      65,    66,    66,    67,    67,    68,    68,    69,    70,    71,
+      72,    72,    73,    73,    74,    74,    74,    74,    74,    74,
+      74,    74,    74,    74,    75,    75,    75,    76,    76,    76,
+      76,    77,    77,    78,    78,    78,    78,    79,    79,    80,
+      80,    80,    80,    80,    81,    81,    81,    81,    81,    82,
+      82,    82,    82,    82,    82,    82,    82,    83,    83,    83,
+      83,    83,    83,    83,    83,    84,    85,    86,    87,    87,
+      88,    88,    88,    89,    89,    90,    91,    91
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
@@ -861,8 +882,8 @@ static const yytype_uint8 yyr2[] =
        1,     1,     1,     4,     5,     4,     5,     5,     5,     1,
        1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
        1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     4,     6,     4,     1,     1,     1,     1,
-       1,     1,     1,     1,     1
+       1,     1,     1,     1,     1,     4,     6,     4,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1
 };
 
 
@@ -1549,44 +1570,44 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 189 "sql_hints.yy" /* yacc.c:1646  */
+#line 205 "sql_hints.yy" /* yacc.c:1646  */
     { *ret= (yyvsp[-1].hint_list); }
-#line 1555 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1576 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 191 "sql_hints.yy" /* yacc.c:1646  */
+#line 207 "sql_hints.yy" /* yacc.c:1646  */
     { *ret= (yyvsp[-2].hint_list); }
-#line 1561 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1582 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 193 "sql_hints.yy" /* yacc.c:1646  */
+#line 209 "sql_hints.yy" /* yacc.c:1646  */
     { *ret= NULL; }
-#line 1567 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1588 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 198 "sql_hints.yy" /* yacc.c:1646  */
+#line 214 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint_list)= NEW_PTN PT_hint_list(thd->mem_root);
             if ((yyval.hint_list) == NULL || (yyval.hint_list)->push_back((yyvsp[0].hint)))
               YYABORT; // OOM
           }
-#line 1577 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1598 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 204 "sql_hints.yy" /* yacc.c:1646  */
+#line 220 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyvsp[-1].hint_list)->push_back((yyvsp[0].hint));
             (yyval.hint_list)= (yyvsp[-1].hint_list);
           }
-#line 1586 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1607 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 223 "sql_hints.yy" /* yacc.c:1646  */
+#line 239 "sql_hints.yy" /* yacc.c:1646  */
     {
             longlong n;
             if (parse_int(&n, (yyvsp[-1].lexer.hint_string).str, (yyvsp[-1].lexer.hint_string).length) || n > UINT_MAX32)
@@ -1602,553 +1623,569 @@ yyreduce:
                 YYABORT; // OOM
             }
           }
-#line 1606 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1627 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 242 "sql_hints.yy" /* yacc.c:1646  */
+#line 258 "sql_hints.yy" /* yacc.c:1646  */
     { (yyval.hint_param_table_list).init(thd->mem_root); }
-#line 1612 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1633 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 248 "sql_hints.yy" /* yacc.c:1646  */
+#line 264 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint_param_table_list).init(thd->mem_root);
             if ((yyval.hint_param_table_list).push_back((yyvsp[0].hint_param_table)))
               YYABORT; // OOM
           }
-#line 1622 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1643 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 254 "sql_hints.yy" /* yacc.c:1646  */
+#line 270 "sql_hints.yy" /* yacc.c:1646  */
     {
             if ((yyvsp[-2].hint_param_table_list).push_back((yyvsp[0].hint_param_table)))
               YYABORT; // OOM
             (yyval.hint_param_table_list)= (yyvsp[-2].hint_param_table_list);
           }
-#line 1632 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1653 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 262 "sql_hints.yy" /* yacc.c:1646  */
+#line 278 "sql_hints.yy" /* yacc.c:1646  */
     { (yyval.hint_param_table_list).init(thd->mem_root); }
-#line 1638 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1659 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 268 "sql_hints.yy" /* yacc.c:1646  */
+#line 284 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint_param_table_list).init(thd->mem_root);
             if ((yyval.hint_param_table_list).push_back((yyvsp[0].hint_param_table)))
               YYABORT; // OOM
           }
-#line 1648 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1669 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 274 "sql_hints.yy" /* yacc.c:1646  */
+#line 290 "sql_hints.yy" /* yacc.c:1646  */
     {
             if ((yyvsp[-2].hint_param_table_list).push_back((yyvsp[0].hint_param_table)))
               YYABORT; // OOM
             (yyval.hint_param_table_list)= (yyvsp[-2].hint_param_table_list);
           }
-#line 1658 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1679 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 282 "sql_hints.yy" /* yacc.c:1646  */
+#line 298 "sql_hints.yy" /* yacc.c:1646  */
     { (yyval.hint_param_index_list).init(thd->mem_root); }
-#line 1664 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1685 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 288 "sql_hints.yy" /* yacc.c:1646  */
+#line 304 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint_param_index_list).init(thd->mem_root);
             if ((yyval.hint_param_index_list).push_back((yyvsp[0].lexer.hint_string)))
               YYABORT; // OOM
           }
-#line 1674 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1695 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 294 "sql_hints.yy" /* yacc.c:1646  */
+#line 310 "sql_hints.yy" /* yacc.c:1646  */
     {
             if ((yyvsp[-2].hint_param_index_list).push_back((yyvsp[0].lexer.hint_string)))
               YYABORT; // OOM
             (yyval.hint_param_index_list)= (yyvsp[-2].hint_param_index_list);
           }
-#line 1684 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1705 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 307 "sql_hints.yy" /* yacc.c:1646  */
+#line 323 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint_param_table).table= (yyvsp[0].lexer.hint_string);
             (yyval.hint_param_table).opt_query_block= NULL_CSTR;
           }
-#line 1693 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1714 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 315 "sql_hints.yy" /* yacc.c:1646  */
+#line 331 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint_param_table).table= (yyvsp[-1].lexer.hint_string);
             (yyval.hint_param_table).opt_query_block= (yyvsp[0].lexer.hint_string);
           }
-#line 1702 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1723 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 324 "sql_hints.yy" /* yacc.c:1646  */
+#line 340 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint_param_table).table= (yyvsp[0].lexer.hint_string);
             (yyval.hint_param_table).opt_query_block= (yyvsp[-1].lexer.hint_string);
           }
-#line 1711 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1732 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 331 "sql_hints.yy" /* yacc.c:1646  */
+#line 347 "sql_hints.yy" /* yacc.c:1646  */
     { (yyval.lexer.hint_string)= NULL_CSTR; }
-#line 1717 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1738 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 337 "sql_hints.yy" /* yacc.c:1646  */
+#line 353 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint)= NEW_PTN PT_qb_level_hint((yyvsp[-2].lexer.hint_string), true, SEMIJOIN_HINT_ENUM, (yyvsp[-1].ulong_num));
             if ((yyval.hint) == NULL)
               YYABORT; // OOM
           }
-#line 1727 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1748 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 344 "sql_hints.yy" /* yacc.c:1646  */
+#line 360 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint)= NEW_PTN PT_qb_level_hint((yyvsp[-2].lexer.hint_string), false, SEMIJOIN_HINT_ENUM, (yyvsp[-1].ulong_num));
             if ((yyval.hint) == NULL)
               YYABORT; // OOM
           }
-#line 1737 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1758 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 351 "sql_hints.yy" /* yacc.c:1646  */
+#line 367 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint)= NEW_PTN PT_qb_level_hint((yyvsp[-2].lexer.hint_string), true, SUBQUERY_HINT_ENUM, (yyvsp[-1].ulong_num));
             if ((yyval.hint) == NULL)
               YYABORT; // OOM
           }
-#line 1747 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1768 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 358 "sql_hints.yy" /* yacc.c:1646  */
+#line 374 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint)= NEW_PTN PT_qb_level_hint(NULL_CSTR, true, JOIN_PREFIX_HINT_ENUM, (yyvsp[-1].hint_param_table_list));
             if ((yyval.hint) == NULL)
               YYABORT; // OOM
           }
-#line 1757 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1778 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 365 "sql_hints.yy" /* yacc.c:1646  */
+#line 381 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint)= NEW_PTN PT_qb_level_hint((yyvsp[-2].lexer.hint_string), true, JOIN_PREFIX_HINT_ENUM, (yyvsp[-1].hint_param_table_list));
             if ((yyval.hint) == NULL)
               YYABORT; // OOM
           }
-#line 1767 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1788 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 372 "sql_hints.yy" /* yacc.c:1646  */
+#line 388 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint)= NEW_PTN PT_qb_level_hint(NULL_CSTR, true, JOIN_SUFFIX_HINT_ENUM, (yyvsp[-1].hint_param_table_list));
             if ((yyval.hint) == NULL)
               YYABORT; // OOM
           }
-#line 1777 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1798 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 379 "sql_hints.yy" /* yacc.c:1646  */
+#line 395 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint)= NEW_PTN PT_qb_level_hint((yyvsp[-2].lexer.hint_string), true, JOIN_SUFFIX_HINT_ENUM, (yyvsp[-1].hint_param_table_list));
             if ((yyval.hint) == NULL)
               YYABORT; // OOM
           }
-#line 1787 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1808 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 386 "sql_hints.yy" /* yacc.c:1646  */
+#line 402 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint)= NEW_PTN PT_qb_level_hint(NULL_CSTR, true, JOIN_ORDER_HINT_ENUM, (yyvsp[-1].hint_param_table_list));
             if ((yyval.hint) == NULL)
               YYABORT; // OOM
           }
-#line 1797 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1818 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 393 "sql_hints.yy" /* yacc.c:1646  */
+#line 409 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint)= NEW_PTN PT_qb_level_hint((yyvsp[-2].lexer.hint_string), true, JOIN_ORDER_HINT_ENUM, (yyvsp[-1].hint_param_table_list));
             if ((yyval.hint) == NULL)
               YYABORT; // OOM
           }
-#line 1807 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1828 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 400 "sql_hints.yy" /* yacc.c:1646  */
+#line 416 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint)= NEW_PTN PT_qb_level_hint((yyvsp[-1].lexer.hint_string), true, JOIN_FIXED_ORDER_HINT_ENUM, 0);
             if ((yyval.hint) == NULL)
               YYABORT; // OOM
           }
-#line 1817 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1838 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 408 "sql_hints.yy" /* yacc.c:1646  */
+#line 424 "sql_hints.yy" /* yacc.c:1646  */
     { (yyval.ulong_num)= 0; }
-#line 1823 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1844 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 410 "sql_hints.yy" /* yacc.c:1646  */
+#line 426 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.ulong_num)= (yyvsp[0].ulong_num);
           }
-#line 1831 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1852 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 414 "sql_hints.yy" /* yacc.c:1646  */
+#line 430 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.ulong_num)= (yyvsp[-2].ulong_num) | (yyvsp[0].ulong_num);
           }
-#line 1839 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1860 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 420 "sql_hints.yy" /* yacc.c:1646  */
+#line 436 "sql_hints.yy" /* yacc.c:1646  */
     { (yyval.ulong_num)= OPTIMIZER_SWITCH_FIRSTMATCH; }
-#line 1845 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1866 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 421 "sql_hints.yy" /* yacc.c:1646  */
+#line 437 "sql_hints.yy" /* yacc.c:1646  */
     { (yyval.ulong_num)= OPTIMIZER_SWITCH_LOOSE_SCAN; }
-#line 1851 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1872 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 49:
-#line 422 "sql_hints.yy" /* yacc.c:1646  */
+#line 438 "sql_hints.yy" /* yacc.c:1646  */
     { (yyval.ulong_num)= OPTIMIZER_SWITCH_MATERIALIZATION; }
-#line 1857 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1878 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 50:
-#line 423 "sql_hints.yy" /* yacc.c:1646  */
+#line 439 "sql_hints.yy" /* yacc.c:1646  */
     { (yyval.ulong_num)= OPTIMIZER_SWITCH_DUPSWEEDOUT; }
-#line 1863 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1884 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 51:
-#line 427 "sql_hints.yy" /* yacc.c:1646  */
+#line 443 "sql_hints.yy" /* yacc.c:1646  */
     { (yyval.ulong_num)=
                                    static_cast<long>(Subquery_strategy::SUBQ_MATERIALIZATION); }
-#line 1870 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1891 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 52:
-#line 429 "sql_hints.yy" /* yacc.c:1646  */
+#line 445 "sql_hints.yy" /* yacc.c:1646  */
     { (yyval.ulong_num)= static_cast<long>(Subquery_strategy::SUBQ_EXISTS); }
-#line 1876 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1897 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 53:
-#line 435 "sql_hints.yy" /* yacc.c:1646  */
+#line 451 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint)= NEW_PTN PT_table_level_hint(NULL_CSTR, (yyvsp[-1].hint_param_table_list), true, (yyvsp[-3].hint_type));
             if ((yyval.hint) == NULL)
               YYABORT; // OOM
           }
-#line 1886 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1907 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 54:
-#line 442 "sql_hints.yy" /* yacc.c:1646  */
+#line 458 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint)= NEW_PTN PT_table_level_hint((yyvsp[-2].lexer.hint_string), (yyvsp[-1].hint_param_table_list), true, (yyvsp[-4].hint_type));
             if ((yyval.hint) == NULL)
               YYABORT; // OOM
           }
-#line 1896 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1917 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 55:
-#line 448 "sql_hints.yy" /* yacc.c:1646  */
+#line 464 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint)= NEW_PTN PT_table_level_hint(NULL_CSTR, (yyvsp[-1].hint_param_table_list), false, (yyvsp[-3].hint_type));
             if ((yyval.hint) == NULL)
               YYABORT; // OOM
           }
-#line 1906 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1927 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 56:
-#line 455 "sql_hints.yy" /* yacc.c:1646  */
+#line 471 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint)= NEW_PTN PT_table_level_hint((yyvsp[-2].lexer.hint_string), (yyvsp[-1].hint_param_table_list), false, (yyvsp[-4].hint_type));
             if ((yyval.hint) == NULL)
               YYABORT; // OOM
           }
-#line 1916 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1937 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 57:
-#line 465 "sql_hints.yy" /* yacc.c:1646  */
+#line 481 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint)= NEW_PTN PT_key_level_hint((yyvsp[-2].hint_param_table), (yyvsp[-1].hint_param_index_list), true, (yyvsp[-4].hint_type));
             if ((yyval.hint) == NULL)
               YYABORT; // OOM
           }
-#line 1926 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1947 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 58:
-#line 472 "sql_hints.yy" /* yacc.c:1646  */
+#line 488 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint)= NEW_PTN PT_key_level_hint((yyvsp[-2].hint_param_table), (yyvsp[-1].hint_param_index_list), false, (yyvsp[-4].hint_type));
             if ((yyval.hint) == NULL)
               YYABORT; // OOM
           }
-#line 1936 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1957 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 59:
-#line 481 "sql_hints.yy" /* yacc.c:1646  */
+#line 497 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint_type)= BKA_HINT_ENUM;
           }
-#line 1944 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1965 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 60:
-#line 485 "sql_hints.yy" /* yacc.c:1646  */
+#line 501 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint_type)= BNL_HINT_ENUM;
           }
-#line 1952 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1973 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 61:
-#line 489 "sql_hints.yy" /* yacc.c:1646  */
+#line 505 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint_type)= HASH_JOIN_HINT_ENUM;
           }
-#line 1960 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1981 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 62:
-#line 493 "sql_hints.yy" /* yacc.c:1646  */
+#line 509 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint_type)= DERIVED_MERGE_HINT_ENUM;
           }
-#line 1968 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1989 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 63:
-#line 500 "sql_hints.yy" /* yacc.c:1646  */
+#line 513 "sql_hints.yy" /* yacc.c:1646  */
     {
-            (yyval.hint_type)= BKA_HINT_ENUM;
+            (yyval.hint_type)= DERIVED_CONDITION_PUSHDOWN_HINT_ENUM;
           }
-#line 1976 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 1997 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 64:
-#line 504 "sql_hints.yy" /* yacc.c:1646  */
+#line 520 "sql_hints.yy" /* yacc.c:1646  */
     {
-            (yyval.hint_type)= BNL_HINT_ENUM;
+            (yyval.hint_type)= BKA_HINT_ENUM;
           }
-#line 1984 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 2005 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 65:
-#line 508 "sql_hints.yy" /* yacc.c:1646  */
+#line 524 "sql_hints.yy" /* yacc.c:1646  */
     {
-            (yyval.hint_type)= HASH_JOIN_HINT_ENUM;
+            (yyval.hint_type)= BNL_HINT_ENUM;
           }
-#line 1992 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 2013 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 66:
-#line 512 "sql_hints.yy" /* yacc.c:1646  */
+#line 528 "sql_hints.yy" /* yacc.c:1646  */
     {
-            (yyval.hint_type)= DERIVED_MERGE_HINT_ENUM;
+            (yyval.hint_type)= HASH_JOIN_HINT_ENUM;
           }
-#line 2000 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 2021 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 67:
-#line 519 "sql_hints.yy" /* yacc.c:1646  */
+#line 532 "sql_hints.yy" /* yacc.c:1646  */
     {
-            (yyval.hint_type)= MRR_HINT_ENUM;
+            (yyval.hint_type)= DERIVED_MERGE_HINT_ENUM;
           }
-#line 2008 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 2029 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 68:
-#line 523 "sql_hints.yy" /* yacc.c:1646  */
+#line 536 "sql_hints.yy" /* yacc.c:1646  */
     {
-            (yyval.hint_type)= NO_RANGE_HINT_ENUM;
+            (yyval.hint_type)= DERIVED_CONDITION_PUSHDOWN_HINT_ENUM;
           }
-#line 2016 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 2037 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 69:
-#line 527 "sql_hints.yy" /* yacc.c:1646  */
-    {
-            (yyval.hint_type)= INDEX_MERGE_HINT_ENUM;
-          }
-#line 2024 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
-    break;
-
-  case 70:
-#line 531 "sql_hints.yy" /* yacc.c:1646  */
-    {
-            (yyval.hint_type)= SKIP_SCAN_HINT_ENUM;
-          }
-#line 2032 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
-    break;
-
-  case 71:
-#line 535 "sql_hints.yy" /* yacc.c:1646  */
-    {
-            (yyval.hint_type)= INDEX_HINT_ENUM;
-          }
-#line 2040 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
-    break;
-
-  case 72:
-#line 539 "sql_hints.yy" /* yacc.c:1646  */
-    {
-            (yyval.hint_type)= JOIN_INDEX_HINT_ENUM;
-          }
-#line 2048 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
-    break;
-
-  case 73:
 #line 543 "sql_hints.yy" /* yacc.c:1646  */
-    {
-            (yyval.hint_type)= GROUP_INDEX_HINT_ENUM;
-          }
-#line 2056 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
-    break;
-
-  case 74:
-#line 547 "sql_hints.yy" /* yacc.c:1646  */
-    {
-            (yyval.hint_type)= ORDER_INDEX_HINT_ENUM;
-          }
-#line 2064 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
-    break;
-
-  case 75:
-#line 554 "sql_hints.yy" /* yacc.c:1646  */
-    {
-            (yyval.hint_type)= ICP_HINT_ENUM;
-          }
-#line 2072 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
-    break;
-
-  case 76:
-#line 558 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint_type)= MRR_HINT_ENUM;
           }
-#line 2080 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 2045 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
-  case 77:
-#line 562 "sql_hints.yy" /* yacc.c:1646  */
+  case 70:
+#line 547 "sql_hints.yy" /* yacc.c:1646  */
+    {
+            (yyval.hint_type)= NO_RANGE_HINT_ENUM;
+          }
+#line 2053 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+    break;
+
+  case 71:
+#line 551 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint_type)= INDEX_MERGE_HINT_ENUM;
           }
-#line 2088 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 2061 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
-  case 78:
-#line 566 "sql_hints.yy" /* yacc.c:1646  */
+  case 72:
+#line 555 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint_type)= SKIP_SCAN_HINT_ENUM;
           }
-#line 2096 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 2069 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
-  case 79:
-#line 570 "sql_hints.yy" /* yacc.c:1646  */
+  case 73:
+#line 559 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint_type)= INDEX_HINT_ENUM;
           }
-#line 2104 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 2077 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
-  case 80:
-#line 574 "sql_hints.yy" /* yacc.c:1646  */
+  case 74:
+#line 563 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint_type)= JOIN_INDEX_HINT_ENUM;
           }
-#line 2112 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 2085 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
-  case 81:
-#line 578 "sql_hints.yy" /* yacc.c:1646  */
+  case 75:
+#line 567 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint_type)= GROUP_INDEX_HINT_ENUM;
           }
-#line 2120 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 2093 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
-  case 82:
-#line 582 "sql_hints.yy" /* yacc.c:1646  */
+  case 76:
+#line 571 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint_type)= ORDER_INDEX_HINT_ENUM;
           }
-#line 2128 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 2101 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+    break;
+
+  case 77:
+#line 578 "sql_hints.yy" /* yacc.c:1646  */
+    {
+            (yyval.hint_type)= ICP_HINT_ENUM;
+          }
+#line 2109 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+    break;
+
+  case 78:
+#line 582 "sql_hints.yy" /* yacc.c:1646  */
+    {
+            (yyval.hint_type)= MRR_HINT_ENUM;
+          }
+#line 2117 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+    break;
+
+  case 79:
+#line 586 "sql_hints.yy" /* yacc.c:1646  */
+    {
+            (yyval.hint_type)= INDEX_MERGE_HINT_ENUM;
+          }
+#line 2125 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+    break;
+
+  case 80:
+#line 590 "sql_hints.yy" /* yacc.c:1646  */
+    {
+            (yyval.hint_type)= SKIP_SCAN_HINT_ENUM;
+          }
+#line 2133 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+    break;
+
+  case 81:
+#line 594 "sql_hints.yy" /* yacc.c:1646  */
+    {
+            (yyval.hint_type)= INDEX_HINT_ENUM;
+          }
+#line 2141 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+    break;
+
+  case 82:
+#line 598 "sql_hints.yy" /* yacc.c:1646  */
+    {
+            (yyval.hint_type)= JOIN_INDEX_HINT_ENUM;
+          }
+#line 2149 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
   case 83:
-#line 589 "sql_hints.yy" /* yacc.c:1646  */
+#line 602 "sql_hints.yy" /* yacc.c:1646  */
+    {
+            (yyval.hint_type)= GROUP_INDEX_HINT_ENUM;
+          }
+#line 2157 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+    break;
+
+  case 84:
+#line 606 "sql_hints.yy" /* yacc.c:1646  */
+    {
+            (yyval.hint_type)= ORDER_INDEX_HINT_ENUM;
+          }
+#line 2165 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+    break;
+
+  case 85:
+#line 613 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint)= NEW_PTN PT_hint_qb_name((yyvsp[-1].lexer.hint_string));
             if ((yyval.hint) == NULL)
               YYABORT; // OOM
           }
-#line 2138 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 2175 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
-  case 84:
-#line 598 "sql_hints.yy" /* yacc.c:1646  */
+  case 86:
+#line 622 "sql_hints.yy" /* yacc.c:1646  */
     {
             (yyval.hint)= NEW_PTN PT_hint_sys_var((yyvsp[-3].lexer.hint_string), (yyvsp[-1].item));
             if ((yyval.hint) == NULL)
               YYABORT; // OOM
           }
-#line 2148 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 2185 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
-  case 85:
-#line 607 "sql_hints.yy" /* yacc.c:1646  */
+  case 87:
+#line 631 "sql_hints.yy" /* yacc.c:1646  */
     {
            if (check_resource_group_name_len((yyvsp[-1].lexer.hint_string), Sql_condition::SL_WARNING))
              YYERROR;
@@ -2157,11 +2194,11 @@ yyreduce:
            if ((yyval.hint) == nullptr)
               YYABORT; // OOM
          }
-#line 2161 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 2198 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
-  case 88:
-#line 624 "sql_hints.yy" /* yacc.c:1646  */
+  case 90:
+#line 648 "sql_hints.yy" /* yacc.c:1646  */
     {
             longlong n;
             if (parse_int(&n, (yyvsp[0].lexer.hint_string).str, (yyvsp[0].lexer.hint_string).length))
@@ -2176,11 +2213,19 @@ yyreduce:
                 YYABORT; // OOM
             }
           }
-#line 2180 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 2217 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
-  case 89:
-#line 639 "sql_hints.yy" /* yacc.c:1646  */
+  case 91:
+#line 663 "sql_hints.yy" /* yacc.c:1646  */
+    {
+            (yyval.item)= NEW_PTN Item_float((yyvsp[0].lexer.hint_string).str, (yyvsp[0].lexer.hint_string).length);
+          }
+#line 2225 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+    break;
+
+  case 92:
+#line 667 "sql_hints.yy" /* yacc.c:1646  */
     {
             longlong n;
             if (parse_int(&n, (yyvsp[0].lexer.hint_string).str, (yyvsp[0].lexer.hint_string).length - 1))
@@ -2212,21 +2257,21 @@ yyreduce:
               }
             }
           }
-#line 2216 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 2261 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
-  case 92:
-#line 679 "sql_hints.yy" /* yacc.c:1646  */
+  case 95:
+#line 707 "sql_hints.yy" /* yacc.c:1646  */
     {
           (yyval.item)= NEW_PTN Item_string((yyvsp[0].lexer.hint_string).str, (yyvsp[0].lexer.hint_string).length, thd->charset());
           if ((yyval.item) == NULL)
             YYABORT; // OOM
         }
-#line 2226 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 2271 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
     break;
 
 
-#line 2230 "/mnt/workspace/percona-server-8.0-source-tarballs-cve/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
+#line 2275 "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/sql/sql_hints.yy.cc" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
