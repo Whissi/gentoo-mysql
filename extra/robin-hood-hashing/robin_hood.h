@@ -42,6 +42,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <cstring>
+#include <limits>
 #include <functional>
 #include <memory> // only to support hash of smart pointers
 #include <stdexcept>
