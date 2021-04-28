@@ -27,6 +27,7 @@
 #include <mysql/components/service.h>
 #include <functional>
 
+#include <stddef.h>
 #include <stdint.h>
 
 #ifdef __cplusplus
