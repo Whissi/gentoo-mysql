@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/tokuportability_static.dir/tokuportability_static_depends.cc.o"
+  "CMakeFiles/tokuportability_static.dir/tokuportability_static_depends.cc.o.d"
   "libtokuportability_static.a"
   "libtokuportability_static.pdb"
   "tokuportability_static_depends.cc"

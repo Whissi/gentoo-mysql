@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/tdb-recover.dir/tdb-recover.cc.o"
+  "CMakeFiles/tdb-recover.dir/tdb-recover.cc.o.d"
   "tdb-recover"
   "tdb-recover.pdb"
 )

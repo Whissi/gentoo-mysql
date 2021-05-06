@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/tokuftdump.dir/tokuftdump.cc.o"
+  "CMakeFiles/tokuftdump.dir/tokuftdump.cc.o.d"
   "tokuftdump"
   "tokuftdump.pdb"
 )

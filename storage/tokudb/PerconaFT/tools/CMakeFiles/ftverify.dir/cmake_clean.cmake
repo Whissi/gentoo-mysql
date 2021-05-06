@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/ftverify.dir/ftverify.cc.o"
+  "CMakeFiles/ftverify.dir/ftverify.cc.o.d"
   "ftverify"
   "ftverify.pdb"
 )

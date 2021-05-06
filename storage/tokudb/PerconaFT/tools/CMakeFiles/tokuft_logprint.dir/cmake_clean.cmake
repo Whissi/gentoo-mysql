@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/tokuft_logprint.dir/tokuft_logprint.cc.o"
+  "CMakeFiles/tokuft_logprint.dir/tokuft_logprint.cc.o.d"
   "tokuft_logprint"
   "tokuft_logprint.pdb"
 )

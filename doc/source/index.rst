@@ -96,6 +96,8 @@ Management Improvements
    management/udf_percona_toolkit
    management/kill_idle_trx
    management/changed_page_tracking
+   management/enforce_engine
+   management/pam_plugin
    management/innodb_expanded_fast_index_creation
    management/backup_locks
    management/audit_log_plugin
@@ -113,6 +115,8 @@ Security Improvements
   security/pam_plugin
   security/simple-ldap
   security/simple-ldap-variables
+  security/selinux
+  security/apparmor
   security/data-at-rest-encryption
   security/vault
   security/using-keyring-plugin
@@ -127,7 +131,6 @@ Security Improvements
   security/encrypting-threads
   security/encrypting-doublewrite-buffers
   security/verifying-encryption
-  security/data-scrubbing
   security/ssl-improvement
   security/data-masking
 
@@ -168,7 +171,6 @@ TokuDB
    tokudb/tokudb_fractal_tree_indexing
    tokudb/tokudb_troubleshooting
    tokudb/tokudb_performance_schema
-   tokudb/toku_backup
    tokudb/tokudb_faq
    tokudb/removing_tokudb
 

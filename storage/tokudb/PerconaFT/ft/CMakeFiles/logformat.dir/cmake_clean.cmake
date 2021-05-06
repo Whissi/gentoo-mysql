@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/logformat.dir/logger/logformat.cc.o"
+  "CMakeFiles/logformat.dir/logger/logformat.cc.o.d"
   "logformat"
   "logformat.pdb"
 )

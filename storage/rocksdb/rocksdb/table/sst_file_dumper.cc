@@ -156,7 +156,8 @@ Status SstFileDumper::NewTableReader(
 
   // We need to turn off pre-fetching of index and filter nodes for
   // BlockBasedTable
-  if (BlockBasedTableFactory::kName == options_.table_factory->Name()) {
+  if (options_.table_factory->IsInstanceOf(
+          TableFactory::kBlockBasedTableName())) {
     return options_.table_factory->NewTableReader(t_opt, std::move(file_),
                                                   file_size, &table_reader_,
                                                   /*enable_prefetch=*/false);
@@ -440,7 +441,7 @@ Status SstFileDumper::ReadSequential(bool print_kv, uint64_t read_num,
     if (read_num > 0 && i > read_num) break;
 
     ParsedInternalKey ikey;
-    if (!ParseInternalKey(key, &ikey)) {
+    if (ParseInternalKey(key, &ikey) != Status::OK()) {
       std::cerr << "Internal Key [" << key.ToString(true /* in hex*/)
                 << "] parse error!\n";
       continue;

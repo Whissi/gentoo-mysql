@@ -1,6 +1,6 @@
 #include "build_version.h"
 const char* rocksdb_build_git_sha =
-"rocksdb_build_git_sha:e29a510f459bff017ac367903d72cada65e54024";
+"rocksdb_build_git_sha:12b78e40bdba980f3692fd2018cc905eef2127f8";
 const char* rocksdb_build_git_date =
-"rocksdb_build_git_date:2020-12-12";
+"rocksdb_build_git_date:2021-05-06";
 const char* rocksdb_build_compile_date = __DATE__;

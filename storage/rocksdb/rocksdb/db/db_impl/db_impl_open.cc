@@ -11,15 +11,15 @@
 #include "db/builder.h"
 #include "db/db_impl/db_impl.h"
 #include "db/error_handler.h"
+#include "db/periodic_work_scheduler.h"
 #include "env/composite_env_wrapper.h"
 #include "file/read_write_util.h"
 #include "file/sst_file_manager_impl.h"
 #include "file/writable_file_writer.h"
 #include "monitoring/persistent_stats_history.h"
-#include "monitoring/stats_dump_scheduler.h"
 #include "options/options_helper.h"
+#include "rocksdb/table.h"
 #include "rocksdb/wal_filter.h"
-#include "table/block_based/block_based_table_factory.h"
 #include "test_util/sync_point.h"
 #include "util/rate_limiter.h"
 
@@ -185,12 +185,12 @@ DBOptions SanitizeOptions(const std::string& dbname, const DBOptions& src) {
 }
 
 namespace {
-Status SanitizeOptionsByTable(
+Status ValidateOptionsByTable(
     const DBOptions& db_opts,
     const std::vector<ColumnFamilyDescriptor>& column_families) {
   Status s;
   for (auto cf : column_families) {
-    s = cf.options.table_factory->SanitizeOptions(db_opts, cf.options);
+    s = ValidateOptions(db_opts, cf.options);
     if (!s.ok()) {
       return s;
     }
@@ -364,7 +364,7 @@ IOStatus Directories::SetDirectories(FileSystem* fs, const std::string& dbname,
 
 Status DBImpl::Recover(
     const std::vector<ColumnFamilyDescriptor>& column_families, bool read_only,
-    bool error_if_log_file_exist, bool error_if_data_exists_in_logs,
+    bool error_if_wal_file_exists, bool error_if_data_exists_in_wals,
     uint64_t* recovered_seq) {
   mutex_.AssertHeld();
 
@@ -588,11 +588,11 @@ Status DBImpl::Recover(
     }
 
     if (logs.size() > 0) {
-      if (error_if_log_file_exist) {
+      if (error_if_wal_file_exists) {
         return Status::Corruption(
-            "The db was opened in readonly mode with error_if_log_file_exist"
-            "flag but a log file already exists");
-      } else if (error_if_data_exists_in_logs) {
+            "The db was opened in readonly mode with error_if_wal_file_exists"
+            "flag but a WAL file already exists");
+      } else if (error_if_data_exists_in_wals) {
         for (auto& log : logs) {
           std::string fname = LogFileName(immutable_db_options_.wal_dir, log);
           uint64_t bytes;
@@ -600,8 +600,8 @@ Status DBImpl::Recover(
           if (s.ok()) {
             if (bytes > 0) {
               return Status::Corruption(
-                  "error_if_data_exists_in_logs is set but there are data "
-                  " in log files.");
+                  "error_if_data_exists_in_wals is set but there are data "
+                  " in WAL files.");
             }
           }
         }
@@ -685,41 +685,56 @@ Status DBImpl::PersistentStatsProcessFormatVersion() {
         (kStatsCFCurrentFormatVersion < format_version_recovered &&
          kStatsCFCompatibleFormatVersion < compatible_version_recovered)) {
       if (!s_format.ok() || !s_compatible.ok()) {
-        ROCKS_LOG_INFO(
+        ROCKS_LOG_WARN(
             immutable_db_options_.info_log,
-            "Reading persistent stats version key failed. Format key: %s, "
-            "compatible key: %s",
+            "Recreating persistent stats column family since reading "
+            "persistent stats version key failed. Format key: %s, compatible "
+            "key: %s",
             s_format.ToString().c_str(), s_compatible.ToString().c_str());
       } else {
-        ROCKS_LOG_INFO(
+        ROCKS_LOG_WARN(
             immutable_db_options_.info_log,
-            "Disable persistent stats due to corrupted or incompatible format "
-            "version\n");
+            "Recreating persistent stats column family due to corrupted or "
+            "incompatible format version. Recovered format: %" PRIu64
+            "; recovered format compatible since: %" PRIu64 "\n",
+            format_version_recovered, compatible_version_recovered);
       }
-      DropColumnFamily(persist_stats_cf_handle_);
-      DestroyColumnFamilyHandle(persist_stats_cf_handle_);
+      s = DropColumnFamily(persist_stats_cf_handle_);
+      if (s.ok()) {
+        s = DestroyColumnFamilyHandle(persist_stats_cf_handle_);
+      }
       ColumnFamilyHandle* handle = nullptr;
-      ColumnFamilyOptions cfo;
-      OptimizeForPersistentStats(&cfo);
-      s = CreateColumnFamily(cfo, kPersistentStatsColumnFamilyName, &handle);
-      persist_stats_cf_handle_ = static_cast<ColumnFamilyHandleImpl*>(handle);
-      // should also persist version here because old stats CF is discarded
-      should_persist_format_version = true;
+      if (s.ok()) {
+        ColumnFamilyOptions cfo;
+        OptimizeForPersistentStats(&cfo);
+        s = CreateColumnFamily(cfo, kPersistentStatsColumnFamilyName, &handle);
+      }
+      if (s.ok()) {
+        persist_stats_cf_handle_ = static_cast<ColumnFamilyHandleImpl*>(handle);
+        // should also persist version here because old stats CF is discarded
+        should_persist_format_version = true;
+      }
     }
   }
-  if (s.ok() && should_persist_format_version) {
+  if (should_persist_format_version) {
     // Persistent stats CF being created for the first time, need to write
     // format version key
     WriteBatch batch;
-    batch.Put(persist_stats_cf_handle_, kFormatVersionKeyString,
-              ToString(kStatsCFCurrentFormatVersion));
-    batch.Put(persist_stats_cf_handle_, kCompatibleVersionKeyString,
-              ToString(kStatsCFCompatibleFormatVersion));
-    WriteOptions wo;
-    wo.low_pri = true;
-    wo.no_slowdown = true;
-    wo.sync = false;
-    s = Write(wo, &batch);
+    if (s.ok()) {
+      s = batch.Put(persist_stats_cf_handle_, kFormatVersionKeyString,
+                    ToString(kStatsCFCurrentFormatVersion));
+    }
+    if (s.ok()) {
+      s = batch.Put(persist_stats_cf_handle_, kCompatibleVersionKeyString,
+                    ToString(kStatsCFCompatibleFormatVersion));
+    }
+    if (s.ok()) {
+      WriteOptions wo;
+      wo.low_pri = true;
+      wo.no_slowdown = true;
+      wo.sync = false;
+      s = Write(wo, &batch);
+    }
   }
   mutex_.Lock();
   return s;
@@ -1272,7 +1287,10 @@ Status DBImpl::WriteLevel0TableForRecovery(int job_id, ColumnFamilyData* cfd,
                                            MemTable* mem, VersionEdit* edit) {
   mutex_.AssertHeld();
   const uint64_t start_micros = env_->NowMicros();
+
   FileMetaData meta;
+  std::vector<BlobFileAddition> blob_file_additions;
+
   std::unique_ptr<std::list<uint64_t>::iterator> pending_outputs_inserted_elem(
       new std::list<uint64_t>::iterator(
           CaptureCurrentFileNumberInPendingOutputs()));
@@ -1319,13 +1337,15 @@ Status DBImpl::WriteLevel0TableForRecovery(int job_id, ColumnFamilyData* cfd,
       if (range_del_iter != nullptr) {
         range_del_iters.emplace_back(range_del_iter);
       }
+
       IOStatus io_s;
       s = BuildTable(
-          dbname_, env_, fs_.get(), *cfd->ioptions(), mutable_cf_options,
-          file_options_for_compaction_, cfd->table_cache(), iter.get(),
-          std::move(range_del_iters), &meta, cfd->internal_comparator(),
-          cfd->int_tbl_prop_collector_factories(), cfd->GetID(), cfd->GetName(),
-          snapshot_seqs, earliest_write_conflict_snapshot, snapshot_checker,
+          dbname_, versions_.get(), env_, fs_.get(), *cfd->ioptions(),
+          mutable_cf_options, file_options_for_compaction_, cfd->table_cache(),
+          iter.get(), std::move(range_del_iters), &meta, &blob_file_additions,
+          cfd->internal_comparator(), cfd->int_tbl_prop_collector_factories(),
+          cfd->GetID(), cfd->GetName(), snapshot_seqs,
+          earliest_write_conflict_snapshot, snapshot_checker,
           GetCompressionFlush(*cfd->ioptions(), mutable_cf_options),
           mutable_cf_options.sample_for_compression,
           mutable_cf_options.compression_opts, paranoid_file_checks,
@@ -1347,23 +1367,39 @@ Status DBImpl::WriteLevel0TableForRecovery(int job_id, ColumnFamilyData* cfd,
 
   // Note that if file_size is zero, the file has been deleted and
   // should not be added to the manifest.
-  int level = 0;
-  if (s.ok() && meta.fd.GetFileSize() > 0) {
+  const bool has_output = meta.fd.GetFileSize() > 0;
+  assert(has_output || blob_file_additions.empty());
+
+  constexpr int level = 0;
+
+  if (s.ok() && has_output) {
     edit->AddFile(level, meta.fd.GetNumber(), meta.fd.GetPathId(),
                   meta.fd.GetFileSize(), meta.smallest, meta.largest,
                   meta.fd.smallest_seqno, meta.fd.largest_seqno,
                   meta.marked_for_compaction, meta.oldest_blob_file_number,
                   meta.oldest_ancester_time, meta.file_creation_time,
                   meta.file_checksum, meta.file_checksum_func_name);
+
+    edit->SetBlobFileAdditions(std::move(blob_file_additions));
   }
 
   InternalStats::CompactionStats stats(CompactionReason::kFlush, 1);
   stats.micros = env_->NowMicros() - start_micros;
-  stats.bytes_written = meta.fd.GetFileSize();
-  stats.num_output_files = 1;
+
+  if (has_output) {
+    stats.bytes_written = meta.fd.GetFileSize();
+
+    const auto& blobs = edit->GetBlobFileAdditions();
+    for (const auto& blob : blobs) {
+      stats.bytes_written += blob.GetTotalBlobBytes();
+    }
+
+    stats.num_output_files = static_cast<int>(blobs.size()) + 1;
+  }
+
   cfd->internal_stats()->AddCompactionStats(level, Env::Priority::USER, stats);
   cfd->internal_stats()->AddCFStats(InternalStats::BYTES_FLUSHED,
-                                    meta.fd.GetFileSize());
+                                    stats.bytes_written);
   RecordTick(stats_, COMPACT_WRITE_BYTES, meta.fd.GetFileSize());
   return s;
 }
@@ -1451,7 +1487,7 @@ Status DBImpl::Open(const DBOptions& db_options, const std::string& dbname,
                     const std::vector<ColumnFamilyDescriptor>& column_families,
                     std::vector<ColumnFamilyHandle*>* handles, DB** dbptr,
                     const bool seq_per_batch, const bool batch_per_txn) {
-  Status s = SanitizeOptionsByTable(db_options, column_families);
+  Status s = ValidateOptionsByTable(db_options, column_families);
   if (!s.ok()) {
     return s;
   }
@@ -1598,7 +1634,7 @@ Status DBImpl::Open(const DBOptions& db_options, const std::string& dbname,
     }
   }
   if (s.ok() && impl->immutable_db_options_.persist_stats_to_disk) {
-    // try to read format version but no need to fail Open() even if it fails
+    // try to read format version
     s = impl->PersistentStatsProcessFormatVersion();
   }
 
@@ -1642,6 +1678,8 @@ Status DBImpl::Open(const DBOptions& db_options, const std::string& dbname,
     *dbptr = impl;
     impl->opened_successfully_ = true;
     impl->MaybeScheduleFlushOrCompaction();
+  } else {
+    persist_options_status.PermitUncheckedError();
   }
   impl->mutex_.Unlock();
 
@@ -1736,9 +1774,13 @@ Status DBImpl::Open(const DBOptions& db_options, const std::string& dbname,
           "DB::Open() failed --- Unable to persist Options file",
           persist_options_status.ToString());
     }
+  } else {
+    ROCKS_LOG_WARN(impl->immutable_db_options_.info_log,
+                   "Persisting Option File error: %s",
+                   persist_options_status.ToString().c_str());
   }
   if (s.ok()) {
-    impl->StartStatsDumpScheduler();
+    impl->StartPeriodicWorkScheduler();
   } else {
     for (auto* h : *handles) {
       delete h;

@@ -8,8 +8,8 @@ export CFLAGS=
 export CXXFLAGS=
 
 PACKAGE=percona-server
-PS_VERSION_EXTRA = '13'
-REVISION = '6f7822f'
+PS_VERSION_EXTRA = '14'
+REVISION = '3558242'
 COMPILATION_COMMENT_RELEASE = "Percona Server (GPL), Release $(PS_VERSION_EXTRA), Revision $(REVISION)"
 COMPILATION_COMMENT_DEBUG = "Percona Server - Debug (GPL), Release $(PS_VERSION_EXTRA), Revision $(REVISION)"
 TOKUDB_BACKUP_VERSION = ""
@@ -77,6 +77,8 @@ ifeq ($(SKIP_DEBUG_BINARY),)
 		-DWITH_FEDERATED_STORAGE_ENGINE=ON \
 		-DWITH_PAM=ON \
 		-DWITH_ROCKSDB=ON \
+		-DROCKSDB_DISABLE_AVX2=1 \
+		-DROCKSDB_DISABLE_MARCH_NATIVE=1 \
 		-DFORCE_INSOURCE_BUILD=1 \
 		-DDOWNLOAD_BOOST=1 \
 		-DWITH_BOOST=libboost \
@@ -123,6 +125,8 @@ endif
 		-DWITH_FEDERATED_STORAGE_ENGINE=ON \
 		-DWITH_PAM=ON \
 		-DWITH_ROCKSDB=ON \
+		-DROCKSDB_DISABLE_AVX2=1 \
+		-DROCKSDB_DISABLE_MARCH_NATIVE=1 \
 		-DDOWNLOAD_BOOST=1 \
 		-DWITH_BOOST=libboost \
 		-DWITH_SYSTEM_LIBS=ON \
@@ -184,6 +188,10 @@ override_dh_auto_install:
 
 	# install source tarball for source package
 	install -D -m 0644 $(EXPORTED_SOURCE_TARBALL) $(TMP)/usr/src/percona-server/`basename $(EXPORTED_SOURCE_TARBALL)`
+
+	# install AppArmor profile for Percona Server
+	install -d $(TMP)/etc/apparmor.d
+	install -d $(TMP)/etc/apparmor.d/local
 
 override_dh_strip:
 	dh_strip --dbg-package=percona-server-dbg

@@ -4,11 +4,11 @@
 /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/CMakeFiles/build_snappy
 /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/CMakeFiles/build_snappy.rule
 /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/CMakeFiles/build_snappy-complete.rule
+/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/snappy/src/build_snappy-stamp/build_snappy-build.rule
+/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/snappy/src/build_snappy-stamp/build_snappy-configure.rule
+/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/snappy/src/build_snappy-stamp/build_snappy-download.rule
 /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/snappy/src/build_snappy-stamp/build_snappy-install.rule
 /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/snappy/src/build_snappy-stamp/build_snappy-mkdir.rule
-/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/snappy/src/build_snappy-stamp/build_snappy-download.rule
-/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/snappy/src/build_snappy-stamp/build_snappy-update.rule
 /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/snappy/src/build_snappy-stamp/build_snappy-patch.rule
-/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/snappy/src/build_snappy-stamp/build_snappy-configure.rule
-/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/snappy/src/build_snappy-stamp/build_snappy-build.rule
 /mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/snappy/src/build_snappy-stamp/build_snappy-reclone_src.rule
+/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/snappy/src/build_snappy-stamp/build_snappy-update.rule

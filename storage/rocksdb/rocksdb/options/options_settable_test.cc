@@ -9,6 +9,8 @@
 
 #include <cstring>
 
+#include "options/cf_options.h"
+#include "options/db_options.h"
 #include "options/options_helper.h"
 #include "rocksdb/convenience.h"
 #include "test_util/testharness.h"
@@ -276,6 +278,7 @@ TEST_F(OptionsSettableTest, DBOptionsAllFieldsSettable) {
                              "skip_log_error_on_recovery=true;"
                              "writable_file_max_buffer_size=1048576;"
                              "paranoid_checks=true;"
+                             "track_and_verify_wals_in_manifest=true;"
                              "is_fd_close_on_exec=false;"
                              "bytes_per_sync=4295013613;"
                              "strict_bytes_per_sync=true;"
@@ -424,6 +427,7 @@ TEST_F(OptionsSettableTest, ColumnFamilyOptionsAllFieldsSettable) {
   options->compaction_options_universal = CompactionOptionsUniversal();
   options->hard_rate_limit = 0;
   options->soft_rate_limit = 0;
+  options->num_levels = 42;  // Initialize options for MutableCF
   options->purge_redundant_kvs_while_flush = false;
   options->max_mem_compaction_level = 0;
   options->compaction_filter = nullptr;
@@ -476,6 +480,7 @@ TEST_F(OptionsSettableTest, ColumnFamilyOptionsAllFieldsSettable) {
       "memtable_prefix_bloom_size_ratio=0.4642;"
       "memtable_whole_key_filtering=true;"
       "memtable_insert_with_hint_prefix_extractor=rocksdb.CappedPrefix.13;"
+      "check_flush_compaction_key_order=false;"
       "paranoid_file_checks=true;"
       "force_consistency_checks=true;"
       "inplace_update_num_locks=7429;"

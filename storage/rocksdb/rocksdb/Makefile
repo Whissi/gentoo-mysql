@@ -560,6 +560,7 @@ PARALLEL_TEST = \
 ifeq ($(USE_FOLLY_DISTRIBUTED_MUTEX),1)
 	TESTS += folly_synchronization_distributed_mutex_test
 	PARALLEL_TEST += folly_synchronization_distributed_mutex_test
+	TESTS_PASSING_ASC = folly_synchronization_distributed_mutex_test
 endif
 
 # options_settable_test doesn't pass with UBSAN as we use hack in the test
@@ -577,6 +578,7 @@ ifdef ASSERT_STATUS_CHECKED
 		blob_file_addition_test \
 		blob_file_builder_test \
 		blob_file_garbage_test \
+		blob_file_reader_test \
 		bloom_test \
 		cassandra_format_test \
 		cassandra_row_merge_test \
@@ -585,6 +587,13 @@ ifdef ASSERT_STATUS_CHECKED
 		coding_test \
 		crc32c_test \
 		dbformat_test \
+		db_basic_test \
+		db_with_timestamp_basic_test \
+		db_with_timestamp_compaction_test \
+		db_options_test \
+		db_properties_test \
+		db_secondary_test \
+		options_file_test \
 		defer_test \
 		filename_test \
 		dynamic_bloom_test \
@@ -592,7 +601,10 @@ ifdef ASSERT_STATUS_CHECKED
 		env_test \
 		env_logger_test \
 		event_logger_test \
+		error_handler_fs_test \
+		auto_roll_logger_test \
 		file_indexer_test \
+		flush_job_test \
 		hash_table_test \
 		hash_test \
 		heap_test \
@@ -600,33 +612,61 @@ ifdef ASSERT_STATUS_CHECKED
 		inlineskiplist_test \
 		io_posix_test \
 		iostats_context_test \
+		ldb_cmd_test \
 		memkind_kmem_allocator_test \
 		merger_test \
 		mock_env_test \
 		object_registry_test \
+		prefix_test \
+		repair_test \
+		configurable_test \
 		options_settable_test \
 		options_test \
 		random_test \
 		range_del_aggregator_test \
+		sst_file_reader_test \
 		range_tombstone_fragmenter_test \
 		repeatable_thread_test \
 		skiplist_test \
 		slice_test \
 		sst_dump_test \
 		statistics_test \
+		stats_history_test \
 		thread_local_test \
+		trace_analyzer_test \
 		env_timed_test \
 		filelock_test \
 		timer_queue_test \
 		timer_test \
+		options_util_test \
+		persistent_cache_test \
 		util_merge_operators_test \
 		block_cache_trace_analyzer_test \
 		block_cache_tracer_test \
 		cache_simulator_test \
 		sim_cache_test \
+		version_builder_test \
 		version_edit_test \
 		work_queue_test \
 		write_controller_test \
+		compaction_iterator_test \
+		compaction_job_test \
+		compaction_job_stats_test \
+	        io_tracer_test \
+		merge_helper_test \
+		memtable_list_test \
+		flush_job_test \
+		block_based_filter_block_test \
+		block_fetcher_test \
+		full_filter_block_test \
+		partitioned_filter_block_test \
+		column_family_test \
+		file_reader_writer_test \
+		corruption_test \
+		db_universal_compaction_test \
+		import_column_family_test \
+		memory_test \
+		table_test \
 
 ifeq ($(USE_FOLLY_DISTRIBUTED_MUTEX),1)
 TESTS_PASSING_ASC += folly_synchronization_distributed_mutex_test
@@ -634,13 +674,13 @@ endif
 
 	# Enable building all unit tests, but use check_some to run only tests
 	# known to pass ASC (ASSERT_STATUS_CHECKED)
-	SUBSET := $(TESTS_PASSING_ASC)
+	ROCKSDBTESTS_SUBSET ?= $(TESTS_PASSING_ASC)
 	# Alternate: only build unit tests known to pass ASC, and run them
 	# with make check
 	#TESTS := $(filter $(TESTS_PASSING_ASC),$(TESTS))
 	#PARALLEL_TEST := $(filter $(TESTS_PASSING_ASC),$(PARALLEL_TEST))
 else
-	SUBSET := $(TESTS)
+	ROCKSDBTESTS_SUBSET ?= $(TESTS)
 endif
 # Not necessarily well thought out or up-to-date, but matches old list
 TESTS_PLATFORM_DEPENDENT := \
@@ -670,22 +710,22 @@ TESTS_PLATFORM_DEPENDENT := \
 	iostats_context_test \
 	db_wal_test \
 
-# Sort SUBSET for filtering, except db_test is special (expensive) so
-# is placed first (out-of-order)
-SUBSET := $(filter db_test, $(SUBSET)) $(sort $(filter-out db_test, $(SUBSET)))
+# Sort ROCKSDBTESTS_SUBSET for filtering, except db_test is special (expensive)
+# so is placed first (out-of-order)
+ROCKSDBTESTS_SUBSET := $(filter db_test, $(ROCKSDBTESTS_SUBSET)) $(sort $(filter-out db_test, $(ROCKSDBTESTS_SUBSET)))
 
 ifdef ROCKSDBTESTS_START
-        SUBSET := $(shell echo $(SUBSET) | sed 's/^.*$(ROCKSDBTESTS_START)/$(ROCKSDBTESTS_START)/')
+        ROCKSDBTESTS_SUBSET := $(shell echo $(ROCKSDBTESTS_SUBSET) | sed 's/^.*$(ROCKSDBTESTS_START)/$(ROCKSDBTESTS_START)/')
 endif
 
 ifdef ROCKSDBTESTS_END
-        SUBSET := $(shell echo $(SUBSET) | sed 's/$(ROCKSDBTESTS_END).*//')
+        ROCKSDBTESTS_SUBSET := $(shell echo $(ROCKSDBTESTS_SUBSET) | sed 's/$(ROCKSDBTESTS_END).*//')
 endif
 
 ifeq ($(ROCKSDBTESTS_PLATFORM_DEPENDENT), only)
-        SUBSET := $(filter $(TESTS_PLATFORM_DEPENDENT), $(SUBSET))
+        ROCKSDBTESTS_SUBSET := $(filter $(TESTS_PLATFORM_DEPENDENT), $(ROCKSDBTESTS_SUBSET))
 else ifeq ($(ROCKSDBTESTS_PLATFORM_DEPENDENT), exclude)
-        SUBSET := $(filter-out $(TESTS_PLATFORM_DEPENDENT), $(SUBSET))
+        ROCKSDBTESTS_SUBSET := $(filter-out $(TESTS_PLATFORM_DEPENDENT), $(ROCKSDBTESTS_SUBSET))
 endif
 
 # bench_tool_analyer main is in bench_tool_analyzer_tool, or this would be simpler...
@@ -787,7 +827,7 @@ endif  # PLATFORM_SHARED_EXT
 
 all: $(LIBRARY) $(BENCHMARKS) tools tools_lib test_libs $(TESTS)
 
-all_but_some_tests: $(LIBRARY) $(BENCHMARKS) tools tools_lib test_libs $(SUBSET)
+all_but_some_tests: $(LIBRARY) $(BENCHMARKS) tools tools_lib test_libs $(ROCKSDBTESTS_SUBSET)
 
 static_lib: $(STATIC_LIBRARY)
 
@@ -1005,8 +1045,8 @@ ifndef SKIP_FORMAT_BUCK_CHECKS
 endif
 
 # TODO add ldb_tests
-check_some: $(SUBSET)
-	for t in $(SUBSET); do echo "===== Running $$t (`date`)"; ./$$t || exit 1; done
+check_some: $(ROCKSDBTESTS_SUBSET)
+	for t in $(ROCKSDBTESTS_SUBSET); do echo "===== Running $$t (`date`)"; ./$$t || exit 1; done
 
 .PHONY: ldb_tests
 ldb_tests: ldb
@@ -1110,6 +1150,9 @@ ubsan_crash_test_with_best_efforts_recovery: clean
 valgrind_test:
 	ROCKSDB_VALGRIND_RUN=1 DISABLE_JEMALLOC=1 $(MAKE) valgrind_check
 
+valgrind_test_some:
+	ROCKSDB_VALGRIND_RUN=1 DISABLE_JEMALLOC=1 $(MAKE) valgrind_check_some
+
 valgrind_check: $(TESTS)
 	$(MAKE) DRIVER="$(VALGRIND_VER) $(VALGRIND_OPTS)" gen_parallel_tests
 	$(AM_V_GEN)if test "$(J)" != 1                                  \
@@ -1128,6 +1171,14 @@ valgrind_check: $(TESTS)
 		done; \
 	fi
 
+valgrind_check_some: $(ROCKSDBTESTS_SUBSET)
+	for t in $(ROCKSDBTESTS_SUBSET); do \
+		$(VALGRIND_VER) $(VALGRIND_OPTS) ./$$t; \
+		ret_code=$$?; \
+		if [ $$ret_code -ne 0 ]; then \
+			exit $$ret_code; \
+		fi; \
+	done
 
 ifneq ($(PAR_TEST),)
 parloop:
@@ -1729,6 +1780,9 @@ thread_list_test: $(OBJ_DIR)/util/thread_list_test.o $(TEST_LIBRARY) $(LIBRARY)
 compact_files_test: $(OBJ_DIR)/db/compact_files_test.o $(TEST_LIBRARY) $(LIBRARY)
 	$(AM_LINK)
 
+configurable_test: options/configurable_test.o $(TEST_LIBRARY) $(LIBRARY)
+	$(AM_LINK)
+
 options_test: $(OBJ_DIR)/options/options_test.o $(TEST_LIBRARY) $(LIBRARY)
 	$(AM_LINK)
 
@@ -1861,10 +1915,13 @@ blob_file_builder_test: $(OBJ_DIR)/db/blob/blob_file_builder_test.o $(TEST_LIBRA
 blob_file_garbage_test: $(OBJ_DIR)/db/blob/blob_file_garbage_test.o $(TEST_LIBRARY) $(LIBRARY)
 	$(AM_LINK)
 
+blob_file_reader_test: $(OBJ_DIR)/db/blob/blob_file_reader_test.o $(TEST_LIBRARY) $(LIBRARY)
+	$(AM_LINK)
+
 timer_test: $(OBJ_DIR)/util/timer_test.o $(TEST_LIBRARY) $(LIBRARY)
 	$(AM_LINK)
 
-stats_dump_scheduler_test: $(OBJ_DIR)/monitoring/stats_dump_scheduler_test.o $(TEST_LIBRARY) $(LIBRARY)
+periodic_work_scheduler_test: $(OBJ_DIR)/db/periodic_work_scheduler_test.o $(TEST_LIBRARY) $(LIBRARY)
 	$(AM_LINK)
 
 testutil_test: $(OBJ_DIR)/test_util/testutil_test.o $(TEST_LIBRARY) $(LIBRARY)
@@ -1874,6 +1931,12 @@ io_tracer_test: $(OBJ_DIR)/trace_replay/io_tracer_test.o $(OBJ_DIR)/trace_replay
 	$(AM_LINK)
 
 prefetch_test: $(OBJ_DIR)/file/prefetch_test.o $(TEST_LIBRARY) $(LIBRARY)
+	$(AM_LINK)
+
+io_tracer_parser_test: $(OBJ_DIR)/tools/io_tracer_parser_test.o $(OBJ_DIR)/tools/io_tracer_parser_tool.o $(TEST_LIBRARY) $(LIBRARY)
+	$(AM_LINK)
+
+io_tracer_parser: $(OBJ_DIR)/tools/io_tracer_parser.o $(TOOLS_LIBRARY) $(LIBRARY)
 	$(AM_LINK)
 
 #-------------------------------------------------
@@ -2312,6 +2375,9 @@ depend: $(DEPFILES) $(DEPFILES_C) $(DEPFILES_ASM)
 else
 depend: $(DEPFILES)
 endif
+
+build_subset_tests: $(ROCKSDBTESTS_SUBSET)
+	$(AM_V_GEN)if [ -n "$${ROCKSDBTESTS_SUBSET_TESTS_TO_FILE}" ]; then echo "$(ROCKSDBTESTS_SUBSET)" > "$${ROCKSDBTESTS_SUBSET_TESTS_TO_FILE}"; else echo "$(ROCKSDBTESTS_SUBSET)"; fi
 
 # if the make goal is either "clean" or "format", we shouldn't
 # try to import the *.d files.

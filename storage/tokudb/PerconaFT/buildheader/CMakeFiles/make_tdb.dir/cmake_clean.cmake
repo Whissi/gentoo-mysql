@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/make_tdb.dir/make_tdb.cc.o"
+  "CMakeFiles/make_tdb.dir/make_tdb.cc.o.d"
   "make_tdb"
   "make_tdb.pdb"
 )

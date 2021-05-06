@@ -391,6 +391,12 @@ if(NOT WITH_DYNAMIC_EXTENSION)
   add_definitions(-DROCKSDB_NO_DYNAMIC_EXTENSION)
 endif()
 
+option(ASSERT_STATUS_CHECKED "build with assert status checked" OFF)
+if (ASSERT_STATUS_CHECKED)
+  message(STATUS "Build with assert status checked")
+  add_definitions(-DROCKSDB_ASSERT_STATUS_CHECKED)
+endif()
+
 if(DEFINED USE_RTTI)
   if(USE_RTTI)
     message(STATUS "Enabling RTTI")
@@ -567,8 +573,9 @@ set(SOURCES
         db/blob/blob_file_builder.cc
         db/blob/blob_file_garbage.cc
         db/blob/blob_file_meta.cc
+        db/blob/blob_file_reader.cc
         db/blob/blob_log_format.cc
-        db/blob/blob_log_reader.cc
+        db/blob/blob_log_sequential_reader.cc
         db/blob/blob_log_writer.cc
         db/builder.cc
         db/c.cc
@@ -614,6 +621,8 @@ set(SOURCES
         db/memtable_list.cc
         db/merge_helper.cc
         db/merge_operator.cc
+        db/output_validator.cc
+        db/periodic_work_scheduler.cc
         db/range_del_aggregator.cc
         db/range_tombstone_fragmenter.cc
         db/repair.cc
@@ -671,12 +680,12 @@ set(SOURCES
         monitoring/perf_level.cc
         monitoring/persistent_stats_history.cc
         monitoring/statistics.cc
-        monitoring/stats_dump_scheduler.cc
         monitoring/thread_status_impl.cc
         monitoring/thread_status_updater.cc
         monitoring/thread_status_util.cc
         monitoring/thread_status_util_debug.cc
         options/cf_options.cc
+        options/configurable.cc
         options/db_options.cc
         options/options.cc
         options/options_helper.cc
@@ -727,6 +736,7 @@ set(SOURCES
         table/sst_file_dumper.cc
         table/sst_file_reader.cc
         table/sst_file_writer.cc
+        table/table_factory.cc
         table/table_properties.cc
         table/two_level_iterator.cc
         test_util/sync_point.cc
@@ -735,6 +745,7 @@ set(SOURCES
         test_util/transaction_test_util.cc
         tools/block_cache_analyzer/block_cache_trace_analyzer.cc
         tools/dump/db_dump_tool.cc
+        tools/io_tracer_parser_tool.cc
         tools/ldb_cmd.cc
         tools/ldb_tool.cc
         tools/sst_dump_tool.cc
@@ -1034,6 +1045,7 @@ if(WITH_TESTS)
         db/blob/blob_file_addition_test.cc
         db/blob/blob_file_builder_test.cc
         db/blob/blob_file_garbage_test.cc
+        db/blob/blob_file_reader_test.cc
         db/blob/db_blob_index_test.cc
         db/column_family_test.cc
         db/compact_files_test.cc
@@ -1093,6 +1105,7 @@ if(WITH_TESTS)
         db/merge_test.cc
         db/options_file_test.cc
         db/perf_context_test.cc
+        db/periodic_work_scheduler_test.cc
         db/plain_table_db_test.cc
         db/prefix_test.cc
         db/range_del_aggregator_test.cc
@@ -1124,8 +1137,8 @@ if(WITH_TESTS)
         monitoring/histogram_test.cc
         monitoring/iostats_context_test.cc
         monitoring/statistics_test.cc
-        monitoring/stats_dump_scheduler_test.cc
         monitoring/stats_history_test.cc
+        options/configurable_test.cc
         options/options_settable_test.cc
         options/options_test.cc
         table/block_based/block_based_filter_block_test.cc
@@ -1144,6 +1157,7 @@ if(WITH_TESTS)
         test_util/testutil_test.cc
         trace_replay/io_tracer_test.cc
         tools/block_cache_analyzer/block_cache_trace_analyzer_test.cc
+        tools/io_tracer_parser_test.cc
         tools/ldb_cmd_test.cc
         tools/reduce_levels_test.cc
         tools/sst_dump_test.cc

@@ -1,11 +1,18 @@
 file(REMOVE_RECURSE
   "CMakeFiles/locktree_static.dir/keyrange.cc.o"
+  "CMakeFiles/locktree_static.dir/keyrange.cc.o.d"
   "CMakeFiles/locktree_static.dir/lock_request.cc.o"
+  "CMakeFiles/locktree_static.dir/lock_request.cc.o.d"
   "CMakeFiles/locktree_static.dir/locktree.cc.o"
+  "CMakeFiles/locktree_static.dir/locktree.cc.o.d"
   "CMakeFiles/locktree_static.dir/manager.cc.o"
+  "CMakeFiles/locktree_static.dir/manager.cc.o.d"
   "CMakeFiles/locktree_static.dir/range_buffer.cc.o"
+  "CMakeFiles/locktree_static.dir/range_buffer.cc.o.d"
   "CMakeFiles/locktree_static.dir/txnid_set.cc.o"
+  "CMakeFiles/locktree_static.dir/txnid_set.cc.o.d"
   "CMakeFiles/locktree_static.dir/wfg.cc.o"
+  "CMakeFiles/locktree_static.dir/wfg.cc.o.d"
   "liblocktree_static.a"
   "liblocktree_static.pdb"
 )

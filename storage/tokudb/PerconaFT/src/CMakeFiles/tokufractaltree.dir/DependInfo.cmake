@@ -1,62 +1,25 @@
+
+# Consider dependencies only in project.
+set(CMAKE_DEPENDS_IN_PROJECT_ONLY OFF)
+
 # The set of languages for which implicit dependencies are needed:
 set(CMAKE_DEPENDS_LANGUAGES
-  "CXX"
-  )
-# The set of files for implicit dependencies of each language:
-set(CMAKE_DEPENDS_CHECK_CXX
-  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/errors.cc" "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/errors.cc.o"
-  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/indexer-undo-do.cc" "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/indexer-undo-do.cc.o"
-  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/indexer.cc" "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/indexer.cc.o"
-  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/loader.cc" "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/loader.cc.o"
-  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/toku_patent.cc" "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/toku_patent.cc.o"
-  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/ydb.cc" "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/ydb.cc.o"
-  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/ydb_cursor.cc" "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/ydb_cursor.cc.o"
-  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/ydb_db.cc" "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/ydb_db.cc.o"
-  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/ydb_env_func.cc" "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/ydb_env_func.cc.o"
-  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/ydb_row_lock.cc" "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/ydb_row_lock.cc.o"
-  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/ydb_txn.cc" "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/ydb_txn.cc.o"
-  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/ydb_write.cc" "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/ydb_write.cc.o"
-  )
-set(CMAKE_CXX_COMPILER_ID "GNU")
-
-# Preprocessor definitions for this target.
-set(CMAKE_TARGET_DEFINITIONS_CXX
-  "HAVE_CONFIG_H"
-  "LZ4_DISABLE_DEPRECATE_WARNINGS"
-  "MYSQL_TOKUDB_ENGINE=1"
-  "MYSQL_VERSION_ID=80022"
-  "RAPIDJSON_NO_SIZETYPEDEFINE"
-  "RAPIDJSON_SCHEMA_USE_INTERNALREGEX=0"
-  "RAPIDJSON_SCHEMA_USE_STDREGEX=1"
-  "TOKU_MYSQL_WITH_PFS"
-  "_DEFAULT_SOURCE"
-  "_FILE_OFFSET_BITS=64"
-  "_GNU_SOURCE"
-  "_LARGEFILE64_SOURCE"
-  "_USE_MATH_DEFINES"
-  "_XOPEN_SOURCE=600"
-  "__LONG_LONG_SUPPORTED"
-  "__STDC_FORMAT_MACROS"
-  "__STDC_LIMIT_MACROS"
-  "__STDC_WANT_LIB_EXT1__=1"
-  "tokufractaltree_EXPORTS"
   )
 
-# The include file search paths:
-set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "storage/tokudb/PerconaFT/buildheader"
-  "."
-  "include"
-  "storage/tokudb/PerconaFT/./xz/include"
-  "storage/tokudb/PerconaFT/./snappy/include"
-  "storage/tokudb/PerconaFT/portability"
-  "storage/tokudb/PerconaFT"
-  "storage/tokudb/PerconaFT/src"
-  "storage/tokudb/PerconaFT/src/.."
-  "extra/rapidjson/include"
-  "extra/lz4"
-  "extra/zstd/lib"
-  "extra/zlib"
+# The set of dependency files which are needed:
+set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/errors.cc" "storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/errors.cc.o" "gcc" "storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/errors.cc.o.d"
+  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/indexer-undo-do.cc" "storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/indexer-undo-do.cc.o" "gcc" "storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/indexer-undo-do.cc.o.d"
+  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/indexer.cc" "storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/indexer.cc.o" "gcc" "storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/indexer.cc.o.d"
+  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/loader.cc" "storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/loader.cc.o" "gcc" "storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/loader.cc.o.d"
+  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/toku_patent.cc" "storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/toku_patent.cc.o" "gcc" "storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/toku_patent.cc.o.d"
+  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/ydb.cc" "storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/ydb.cc.o" "gcc" "storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/ydb.cc.o.d"
+  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/ydb_cursor.cc" "storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/ydb_cursor.cc.o" "gcc" "storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/ydb_cursor.cc.o.d"
+  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/ydb_db.cc" "storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/ydb_db.cc.o" "gcc" "storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/ydb_db.cc.o.d"
+  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/ydb_env_func.cc" "storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/ydb_env_func.cc.o" "gcc" "storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/ydb_env_func.cc.o.d"
+  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/ydb_row_lock.cc" "storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/ydb_row_lock.cc.o" "gcc" "storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/ydb_row_lock.cc.o.d"
+  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/ydb_txn.cc" "storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/ydb_txn.cc.o" "gcc" "storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/ydb_txn.cc.o.d"
+  "/mnt/workspace/percona-server-8.0-source-tarballs/test/percona-server/storage/tokudb/PerconaFT/src/ydb_write.cc" "storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/ydb_write.cc.o" "gcc" "storage/tokudb/PerconaFT/src/CMakeFiles/tokufractaltree.dir/ydb_write.cc.o.d"
   )
 
 # Targets to which this target links.
